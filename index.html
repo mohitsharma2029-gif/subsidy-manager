@@ -1,442 +1,4326 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<!-- saved from url=(0055)file:///C:/Users/Mohit%20sharma/Downloads/index_13.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Subsidy Manager — CA App</title>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!-- Firebase SDKs -->
+<script src="./index.html_files/firebase-app-compat.js.download"></script>
+<script src="./index.html_files/firebase-firestore-compat.js.download"></script>
+
+<!-- React -->
+<script src="./index.html_files/react.production.min.js.download"></script>
+<script src="./index.html_files/react-dom.production.min.js.download"></script>
+
+<!-- Firebase Init -->
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyC0VlCSSALqK_HdfCDc4pivJRR9jNjI3ks",
+  authDomain: "subsidy-manager-d5509.firebaseapp.com",
+  projectId: "subsidy-manager-d5509",
+  storageBucket: "subsidy-manager-d5509.firebasestorage.app",
+  messagingSenderId: "699027921731",
+  appId: "1:699027921731:web:8dc9ab0621d4bc4a656df6"
+});
+var db = firebase.firestore();
+</script>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f0ec;color:#1a1a1a;min-height:100vh}
 input,select,textarea{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;color:#1a1a1a;outline:none}
-input:focus,select:focus,textarea:focus{border-color:#4a90d9}
+input:focus,select:focus,textarea:focus{border-color:#1a1a1a}
 button{padding:9px 16px;border:1px solid #ddd;border-radius:8px;font-size:13px;font-family:inherit;background:#fff;color:#1a1a1a;cursor:pointer}
-button:hover{background:#f0f0f0}
-button:disabled{opacity:0.6;cursor:not-allowed}
-.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px}
+button:hover:not(:disabled){background:#f5f5f5}
+button:disabled{opacity:0.5;cursor:not-allowed}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
-const {useState,useEffect,useCallback}=React;
+<div id="root"><div style="max-width: 600px; margin: 0px auto; min-height: 100vh; background: rgb(240, 240, 236);"><div style="background: rgb(26, 26, 26); color: rgb(255, 255, 255); padding: 16px 16px 0px; position: sticky; top: 0px; z-index: 10;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;"><div><p style="font-weight: 700; font-size: 18px; margin: 0px 0px 2px;">📊 Subsidy Manager</p><p style="font-size: 11px; color: rgb(156, 163, 175); margin: 0px;">1 clients · MP · 30 June 2026</p></div><button style="background: rgb(255, 255, 255); color: rgb(26, 26, 26); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 10px; padding: 8px 14px; font-weight: 700; font-size: 13px;">+ Add</button></div><div style="display: flex; overflow-x: auto;"><button style="font-size: 12px; border-width: medium medium 3px; border-style: none none solid; border-color: currentcolor currentcolor rgb(255, 255, 255); border-image: initial; border-radius: 0px; background: none; padding: 8px 12px; color: rgb(255, 255, 255); font-weight: 700; white-space: nowrap; cursor: pointer;">👥 Clients</button><button style="font-size: 12px; border-width: medium medium 3px; border-style: none none solid; border-color: currentcolor currentcolor transparent; border-image: initial; border-radius: 0px; background: none; padding: 8px 12px; color: rgb(156, 163, 175); font-weight: 400; white-space: nowrap; cursor: pointer;">📱 Due (1)</button><button style="font-size: 12px; border-width: medium medium 3px; border-style: none none solid; border-color: currentcolor currentcolor transparent; border-image: initial; border-radius: 0px; background: none; padding: 8px 12px; color: rgb(156, 163, 175); font-weight: 400; white-space: nowrap; cursor: pointer;">💼 Fees</button><button style="font-size: 12px; border-width: medium medium 3px; border-style: none none solid; border-color: currentcolor currentcolor transparent; border-image: initial; border-radius: 0px; background: none; padding: 8px 12px; color: rgb(156, 163, 175); font-weight: 400; white-space: nowrap; cursor: pointer;">📊 Reports</button><button style="font-size: 12px; border-width: medium medium 3px; border-style: none none solid; border-color: currentcolor currentcolor transparent; border-image: initial; border-radius: 0px; background: none; padding: 8px 12px; color: rgb(156, 163, 175); font-weight: 400; white-space: nowrap; cursor: pointer;">⚙️</button></div></div><div style="padding: 16px;"><div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;"><div style="background: rgb(255, 255, 255); border-radius: 12px; padding: 12px 14px; border: 1px solid rgb(229, 231, 235);"><div style="font-size: 11px; color: rgb(107, 114, 128); margin-bottom: 3px;">Total Sanctioned</div><div style="font-size: 16px; font-weight: 700; color: rgb(29, 78, 216);">₹1,00,000</div><div style="font-size: 10px; color: rgb(5, 150, 105);">Received: ₹0</div></div><div style="background: rgb(255, 255, 255); border-radius: 12px; padding: 12px 14px; border: 1px solid rgb(229, 231, 235);"><div style="font-size: 11px; color: rgb(107, 114, 128); margin-bottom: 3px;">Clients</div><div style="font-size: 16px; font-weight: 700; color: rgb(5, 150, 105);">1</div><div style="font-size: 10px; color: rgb(107, 114, 128);">0 closed · 1 overdue</div></div></div><div style="display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;"><div style="background: rgb(237, 233, 254); border: 1px solid rgba(124, 58, 237, 0.25); border-radius: 8px; padding: 4px 10px; font-size: 11px; color: rgb(124, 58, 237); font-weight: 600;">MSMEP 2021: 0</div><div style="background: rgb(219, 234, 254); border: 1px solid rgba(29, 78, 216, 0.25); border-radius: 8px; padding: 4px 10px; font-size: 11px; color: rgb(29, 78, 216); font-weight: 600;">MSMEP 2025: 1</div><div style="background: rgb(204, 251, 241); border: 1px solid rgba(15, 118, 110, 0.25); border-radius: 8px; padding: 4px 10px; font-size: 11px; color: rgb(15, 118, 110); font-weight: 600;">MSMEP 2025 Bhopal: 0</div></div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;"><input placeholder="Search clients…" value="" style="grid-column: 1 / -1;"><select><option value="all">All Schemes</option><option value="msmep2021">MSMEP 2021</option><option value="msmep2025">MSMEP 2025</option><option value="msmep2025bhopal">MSMEP 2025 Bhopal</option></select><select><option value="all">All Status</option><option value="pending">Pending</option><option value="overdue">Overdue</option><option value="submitted">Closed</option></select><select style="grid-column: 1 / -1;"><option value="all">All Districts</option><option value="Indore">Indore</option></select></div><div style="background: rgb(255, 255, 255); border: 1px solid rgb(229, 231, 235); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; cursor: pointer;"><div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px;"><div style="width: 38px; height: 38px; border-radius: 50%; background: rgb(181, 212, 244); color: rgb(4, 44, 83); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12.16px; flex-shrink: 0;">BH</div><div style="flex: 1 1 0%; min-width: 0px;"><div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap;"><p style="font-weight: 700; font-size: 14px; margin: 0px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 160px;">Bha hi saree</p><span style="background: rgb(247, 193, 193); color: rgb(80, 19, 19); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; white-space: nowrap;">Overdue</span></div><div style="display: flex; gap: 6px; align-items: center; margin-top: 3px; flex-wrap: wrap;"><span style="background: rgb(219, 234, 254); color: rgb(29, 78, 216); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap;">MSMEP 2025</span><span style="font-size: 10px; color: rgb(107, 114, 128);">📍 Indore</span></div></div></div><div style="font-size: 11px; color: rgb(107, 114, 128); margin-bottom: 8px;">🏛️ DIC Indore</div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;"><div><div style="font-size: 10px; color: rgb(156, 163, 175); margin-bottom: 2px;">Sanctioned</div><div style="font-size: 14px; font-weight: 700;">₹1,00,000</div></div><div><div style="font-size: 10px; color: rgb(156, 163, 175); margin-bottom: 2px;">Next Due</div><div style="font-size: 13px; font-weight: 700; color: rgb(220, 38, 38);">30 Apr 2026</div></div></div><div style="margin-bottom: 8px;"><div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span style="font-size: 11px; color: rgb(107, 114, 128);">Subsidy Received</span><span style="font-size: 11px; color: rgb(107, 114, 128);">₹0 / ₹1,00,000</span></div><div style="height: 5px; background: rgb(243, 244, 246); border-radius: 4px; overflow: hidden;"><div style="height: 100%; width: 0%; background: rgb(59, 130, 246); border-radius: 4px;"></div></div></div><div style="margin-bottom: 8px;"><div style="display: flex; gap: 3px; align-items: center;"><div title="Inst 1" style="flex: 1 1 0%; height: 6px; border-radius: 3px; background: rgb(239, 68, 68);"></div><div title="Inst 2" style="flex: 1 1 0%; height: 6px; border-radius: 3px; background: rgb(209, 213, 219);"></div><div title="Inst 3" style="flex: 1 1 0%; height: 6px; border-radius: 3px; background: rgb(209, 213, 219);"></div><div title="Inst 4" style="flex: 1 1 0%; height: 6px; border-radius: 3px; background: rgb(209, 213, 219);"></div><span style="font-size: 10px; color: rgb(156, 163, 175); margin-left: 4px; white-space: nowrap;">0/4</span></div></div><button style="width: 100%; font-size: 13px; background: rgb(37, 211, 102); color: rgb(255, 255, 255); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 10px; padding: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px;">📱 Send WhatsApp Reminder</button></div></div></div></div></div>
+<script>
+"use strict";
 
-const DEFAULT_DOCS=["Aadhaar Card (Self-attested)","PAN Card Copy","Bank Account Details / Cancelled Cheque","GST Registration Certificate","CA Certificate (Chartered Accountant)","Income / ITR Certificate","Production / Manufacturing Records","Duly Filled Subsidy Application Form","Detailed Project Report","Last 6 Months Bank Statement","Affidavit on Stamp Paper","Factory / Business License Copy"];
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+/* global firebase, db */
+var _React = React,
+  useState = _React.useState,
+  useEffect = _React.useEffect,
+  useCallback = _React.useCallback;
 
-const SAMPLE_CLIENTS=[
-  {id:"c1",name:"Ramesh Agrotech Pvt Ltd",contact:"Ramesh Sharma",phone:"+919876543210",whatsapp:"919876543210",subsidyAmount:1250000,productionDate:"2025-11-15",dueDate:"2026-05-20",status:"pending",scheme:"MSME Capital Subsidy",docs:DEFAULT_DOCS.map((d,i)=>({name:d,submitted:i<3})),notes:"Priority client."},
-  {id:"c2",name:"Sunita Foods Industries",contact:"Sunita Verma",phone:"+918765432109",whatsapp:"918765432109",subsidyAmount:875000,productionDate:"2025-09-01",dueDate:"2026-05-14",status:"overdue",scheme:"Food Processing Subsidy",docs:DEFAULT_DOCS.map((d,i)=>({name:d,submitted:i<7})),notes:"Overdue - follow up immediately."},
-  {id:"c3",name:"Mahendra Steel Works",contact:"Mahendra Jain",phone:"+917654321098",whatsapp:"917654321098",subsidyAmount:3200000,productionDate:"2025-12-10",dueDate:"2026-06-10",status:"submitted",scheme:"Industrial Capital Investment",docs:DEFAULT_DOCS.map(d=>({name:d,submitted:true})),notes:"All documents submitted."},
-  {id:"c4",name:"Priya Textile Mills",contact:"Priya Kapoor",phone:"+916543210987",whatsapp:"916543210987",subsidyAmount:560000,productionDate:"2026-01-20",dueDate:"2026-06-25",status:"pending",scheme:"Textile Modernisation Fund",docs:DEFAULT_DOCS.map((d,i)=>({name:d,submitted:i<2})),notes:""},
-];
+// ── SCHEMES ──────────────────────────────────────────────────────────────────
+var SCHEMES = {
+  msmep2021: {
+    label: "MSMEP 2021",
+    color: "#7c3aed",
+    bg: "#ede9fe",
+    installmentCount: 4,
+    claimRequired: function claimRequired() {
+      return false;
+    },
+    description: "4 installments · All auto-released · No claim needed"
+  },
+  msmep2025: {
+    label: "MSMEP 2025",
+    color: "#1d4ed8",
+    bg: "#dbeafe",
+    installmentCount: 4,
+    claimRequired: function claimRequired(n) {
+      return n !== 1;
+    },
+    description: "4 installments · 1st auto · 2nd–4th claim required"
+  },
+  msmep2025bhopal: {
+    label: "MSMEP 2025 Bhopal",
+    color: "#0f766e",
+    bg: "#ccfbf1",
+    installmentCount: 7,
+    claimRequired: function claimRequired(n) {
+      return n !== 1;
+    },
+    description: "7 installments · 1st auto · 2nd–7th claim required"
+  }
+};
+var MP_DISTRICTS = ["Indore", "Dewas", "Pithampur", "Dhar", "Khargone", "Ujjain", "Narsinghpur"];
+var getDIC = function getDIC(d) {
+  return d ? "DIC " + d : "";
+};
+var DEFAULT_DOCS = ["Claim Affidavit", "Udhyam Registration Certificate", "GST Registration Certificate", "Chartered Accountant Production Certificate", "Power Bill (relevant period)", "GST 3B Returns (last one year)", "Application Form (duly filled)"];
+var DEFAULT_SETTINGS = {
+  instanceId: "",
+  apiToken: "",
+  officeName: "Our CA Office",
+  officePhone: "",
+  reminderDaysBefore: 30,
+  msgTemplate: "Namaskar *{contact}* ji 🙏\nThis is reminder message to file claim for {scheme}.\n\n📅 Document Submission Due: *{dueDate}*\n⚠️ Only *{daysLeft} days* left!\n\n📌 *Pending Documents ({pendingCount}):*\n{pendingDocs}\n\nKindly submit all required documents at the earliest.\n\n📞 Contact: {officePhone}"
+};
 
-const DEFAULT_SETTINGS={instanceId:"",apiToken:"",officeName:"Our CA Office",officePhone:"",reminderDaysBefore:7,msgTemplate:`Namaskar *{contact}* ji 🙏\n\nYeh ek automated reminder hai *{officeName}* ki taraf se.\n\n📋 *Subsidy File: {scheme}*\n💰 Sanctioned Amount: ₹{amount}\n📅 Document Submission Due: *{dueDate}*\n\n⚠️ Sirf *{daysLeft} din* bache hain!\n\n📌 *Pending Documents ({pendingCount}):*\n{pendingDocs}\n\nKripya in documents ko jaldi submit karein.\n\n📞 Contact: {officePhone}\n\n_Yeh automatic message hai._`};
-
-const statusConfig={pending:{label:"Pending",bg:"#FAC775",text:"#633806"},overdue:{label:"Overdue",bg:"#F7C1C1",text:"#501313"},submitted:{label:"Submitted",bg:"#C0DD97",text:"#173404"}};
-
-const fmt=n=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(n);
-const fmtDate=d=>d?new Date(d+"T00:00:00").toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}):"—";
-const daysUntil=d=>{const t=new Date();t.setHours(0,0,0,0);return Math.round((new Date(d+"T00:00:00")-t)/86400000);};
-const initials=n=>n.split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase();
-
-function buildMessage(template,client,settings){
-  const pending=client.docs.filter(d=>!d.submitted);
-  const d=daysUntil(client.dueDate);
-  return template.replace("{contact}",client.contact).replace("{officeName}",settings.officeName).replace("{scheme}",client.scheme).replace("{amount}",Number(client.subsidyAmount).toLocaleString("en-IN")).replace("{dueDate}",fmtDate(client.dueDate)).replace("{daysLeft}",d<0?"0 (OVERDUE)":String(d)).replace("{pendingCount}",String(pending.length)).replace("{pendingDocs}",pending.map((p,i)=>`${i+1}. ${p.name}`).join("\n")).replace("{officePhone}",settings.officePhone||"N/A");
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function addYears(dateStr, yrs) {
+  if (!dateStr) return "";
+  var d = new Date(dateStr + "T00:00:00");
+  d.setFullYear(d.getFullYear() + yrs);
+  return d.toISOString().split("T")[0];
 }
-
-async function sendViaUltraMsg(instanceId,token,to,message){
-  const clean=to.replace(/\D/g,"");
-  const res=await fetch(`https://api.ultramsg.com/${instanceId}/messages/chat`,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams({token,to:clean+"@c.us",body:message}).toString()});
-  const data=await res.json();
-  if(!res.ok||data.sent===false) throw new Error(data.message||"Send failed");
-  return data;
+function daysUntil(d) {
+  var t = new Date();
+  t.setHours(0, 0, 0, 0);
+  return Math.round((new Date(d + "T00:00:00") - t) / 86400000);
 }
-
-function Badge({status}){
-  const c=statusConfig[status]||statusConfig.pending;
-  return <span style={{background:c.bg,color:c.text,fontSize:11,fontWeight:600,padding:"3px 10px",borderRadius:20,whiteSpace:"nowrap"}}>{c.label}</span>;
+var fmt = function fmt(n) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0
+  }).format(Number(n) || 0);
+};
+var fmtDate = function fmtDate(d) {
+  return d ? new Date(d + "T00:00:00").toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  }) : "—";
+};
+var initials = function initials(n) {
+  return n.split(" ").slice(0, 2).map(function (w) {
+    return w[0];
+  }).join("").toUpperCase();
+};
+function buildInstallments(schemeKey, productionDate, totalAmount) {
+  var scheme = SCHEMES[schemeKey] || SCHEMES.msmep2025;
+  var count = scheme.installmentCount;
+  var base = Math.round(Number(totalAmount || 0) / count);
+  return Array.from({
+    length: count
+  }, function (_, i) {
+    return {
+      no: i + 1,
+      amount: base,
+      dueDate: addYears(productionDate, i),
+      claimRequired: scheme.claimRequired(i + 1),
+      sanctionLetterDate: "",
+      claimFiledDate: "",
+      receivedDate: "",
+      status: "pending",
+      feesDue: 0,
+      feesReceived: 0,
+      notes: ""
+    };
+  });
 }
-
-function Avatar({name,size=40}){
-  const p=[["#B5D4F4","#042C53"],["#9FE1CB","#04342C"],["#F5C4B3","#4A1B0C"],["#FAC775","#412402"],["#F4C0D1","#4B1528"],["#CED4F6","#26215C"]];
-  const [bg,fg]=p[name.charCodeAt(0)%p.length];
-  return <div style={{width:size,height:size,borderRadius:"50%",background:bg,color:fg,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:600,fontSize:size*0.32,flexShrink:0}}>{initials(name)}</div>;
+function effectiveStatus(c) {
+  if (c.status === "submitted") return "submitted";
+  var over = c.installments && c.installments.some(function (i) {
+    return i.status !== "received" && i.dueDate && daysUntil(i.dueDate) < 0;
+  });
+  return over ? "overdue" : "pending";
 }
-
-function Toast({msg,type,onClose}){
-  useEffect(()=>{const t=setTimeout(onClose,4500);return()=>clearTimeout(t);},[]);
-  const colors={success:["#EAF3DE","#3B6D11"],error:["#FCEBEB","#A32D2D"],info:["#E6F1FB","#185FA5"]};
-  const [bg,fg]=colors[type]||colors.info;
-  return <div style={{position:"fixed",bottom:20,right:16,left:16,zIndex:999,background:bg,color:fg,border:`1px solid ${fg}60`,borderRadius:12,padding:"12px 16px",fontSize:13,display:"flex",alignItems:"flex-start",gap:8,boxShadow:"0 4px 20px rgba(0,0,0,0.15)"}}>
-    <span style={{flex:1,lineHeight:1.5}}>{msg}</span>
-    <button onClick={onClose} style={{background:"none",border:"none",cursor:"pointer",color:fg,padding:0,fontSize:18,lineHeight:1,minWidth:"auto"}}>×</button>
-  </div>;
+function buildMessage(tmpl, client, settings) {
+  var pending = client.docs.filter(function (d) {
+    return !d.submitted;
+  });
+  var next = client.installments.find(function (i) {
+    return i.status !== "received";
+  });
+  var d = next && next.dueDate ? daysUntil(next.dueDate) : 99;
+  var scheme = SCHEMES[client.schemeKey] || SCHEMES.msmep2025;
+  return tmpl.replace("{contact}", client.contact || "").replace("{officeName}", settings.officeName || "").replace("{scheme}", scheme.label).replace("{district}", client.district || "N/A").replace("{amount}", Number(client.subsidyAmount).toLocaleString("en-IN")).replace("{dueDate}", next ? fmtDate(next.dueDate) : "N/A").replace("{daysLeft}", d < 0 ? "OVERDUE" : String(d)).replace("{pendingCount}", String(pending.length)).replace("{pendingDocs}", pending.map(function (p, i) {
+    return "".concat(i + 1, ". ").concat(p.name);
+  }).join("\n")).replace("{officePhone}", settings.officePhone || "N/A");
 }
-
-function StatCard({label,value,sub,color}){
-  return <div style={{background:"#fff",borderRadius:12,padding:"14px 16px",border:"1px solid #eee"}}>
-    <div style={{fontSize:12,color:"#666",marginBottom:6}}>{label}</div>
-    <div style={{fontSize:20,fontWeight:700,color}}>{value}</div>
-    {sub&&<div style={{fontSize:11,color:"#888",marginTop:2}}>{sub}</div>}
-  </div>;
+function sendViaUltraMsg(_x, _x2, _x3, _x4) {
+  return _sendViaUltraMsg.apply(this, arguments);
+} // ── UI ATOMS ──────────────────────────────────────────────────────────────────
+function _sendViaUltraMsg() {
+  _sendViaUltraMsg = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee1(instanceId, token, to, message) {
+    var res, data;
+    return _regenerator().w(function (_context1) {
+      while (1) switch (_context1.n) {
+        case 0:
+          _context1.n = 1;
+          return fetch("https://api.ultramsg.com/".concat(instanceId, "/messages/chat"), {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({
+              token: token,
+              to: to.replace(/\D/g, "") + "@c.us",
+              body: message
+            }).toString()
+          });
+        case 1:
+          res = _context1.v;
+          _context1.n = 2;
+          return res.json();
+        case 2:
+          data = _context1.v;
+          if (!(!res.ok || data.sent === false)) {
+            _context1.n = 3;
+            break;
+          }
+          throw new Error(data.message || "Failed");
+        case 3:
+          return _context1.a(2);
+      }
+    }, _callee1);
+  }));
+  return _sendViaUltraMsg.apply(this, arguments);
 }
-
-function ClientCard({client,onClick,onQuickWA}){
-  const d=daysUntil(client.dueDate);
-  const sub=client.docs.filter(x=>x.submitted).length;
-  const pct=Math.round(sub/client.docs.length*100);
-  const pending=client.docs.filter(x=>!x.submitted).length;
-  return <div onClick={onClick} style={{background:"#fff",border:"1px solid #eee",borderRadius:14,padding:"14px 16px",cursor:"pointer",marginBottom:10}}>
-    <div style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:10}}>
-      <Avatar name={client.name} size={38}/>
-      <div style={{flex:1,minWidth:0}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:6,flexWrap:"wrap"}}>
-          <p style={{fontWeight:600,fontSize:14,margin:0,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis",maxWidth:160}}>{client.name}</p>
-          <Badge status={client.status}/>
-        </div>
-        <p style={{fontSize:12,color:"#666",margin:"2px 0 0"}}>{client.scheme}</p>
-      </div>
-    </div>
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:10}}>
-      <div><div style={{fontSize:11,color:"#999",marginBottom:2}}>Sanctioned</div><div style={{fontSize:13,fontWeight:600}}>{fmt(client.subsidyAmount)}</div></div>
-      <div><div style={{fontSize:11,color:"#999",marginBottom:2}}>Due Date</div><div style={{fontSize:13,fontWeight:600,color:client.status!=="submitted"&&d<0?"#c0392b":"#1a1a1a"}}>{fmtDate(client.dueDate)}</div></div>
-    </div>
-    <div style={{marginBottom:10}}>
-      <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
-        <span style={{fontSize:11,color:"#666"}}>Documents</span>
-        <span style={{fontSize:11,color:"#666"}}>{sub}/{client.docs.length}</span>
-      </div>
-      <div style={{height:5,background:"#f0f0f0",borderRadius:4,overflow:"hidden"}}>
-        <div style={{height:"100%",width:`${pct}%`,background:pct===100?"#27ae60":pct>50?"#f39c12":"#e74c3c",borderRadius:4}}/>
-      </div>
-    </div>
-    {client.status!=="submitted"&&client.whatsapp&&pending>0&&(
-      <button onClick={e=>{e.stopPropagation();onQuickWA(client);}} style={{width:"100%",fontSize:13,background:"#25D366",color:"#fff",border:"none",borderRadius:10,padding:"9px",display:"flex",alignItems:"center",justifyContent:"center",gap:6,fontWeight:600}}>
-        📱 Send WhatsApp Reminder
-      </button>
-    )}
-  </div>;
+var STATUS_CFG = {
+  pending: {
+    label: "Pending",
+    bg: "#FAC775",
+    text: "#633806"
+  },
+  overdue: {
+    label: "Overdue",
+    bg: "#F7C1C1",
+    text: "#501313"
+  },
+  submitted: {
+    label: "Closed",
+    bg: "#C0DD97",
+    text: "#173404"
+  }
+};
+function Badge(_ref) {
+  var status = _ref.status;
+  var c = STATUS_CFG[status] || STATUS_CFG.pending;
+  return /*#__PURE__*/React.createElement("span", {
+    style: {
+      background: c.bg,
+      color: c.text,
+      fontSize: 11,
+      fontWeight: 700,
+      padding: "3px 10px",
+      borderRadius: 20,
+      whiteSpace: "nowrap"
+    }
+  }, c.label);
 }
-
-function ClientDetail({client,onClose,onUpdate,onDelete,settings,onSendWA,sending}){
-  const [editing,setEditing]=useState(false);
-  const [form,setForm]=useState({...client});
-  const d=daysUntil(client.dueDate);
-  const sub=client.docs.filter(x=>x.submitted).length;
-  const preview=buildMessage(settings.msgTemplate,client,settings);
-
-  const handleDocChange=(i,val)=>{
-    const docs=client.docs.map((dd,idx)=>idx===i?{...dd,submitted:val}:dd);
-    onUpdate({...client,docs});
+function SchemeBadge(_ref2) {
+  var schemeKey = _ref2.schemeKey;
+  var s = SCHEMES[schemeKey] || SCHEMES.msmep2025;
+  return /*#__PURE__*/React.createElement("span", {
+    style: {
+      background: s.bg,
+      color: s.color,
+      fontSize: 10,
+      fontWeight: 700,
+      padding: "2px 8px",
+      borderRadius: 20,
+      whiteSpace: "nowrap"
+    }
+  }, s.label);
+}
+function InstBadge(_ref3) {
+  var status = _ref3.status;
+  var map = {
+    pending: ["#f3f4f6", "#374151", "Pending"],
+    claim_filed: ["#dbeafe", "#1e40af", "Claim Filed"],
+    received: ["#dcfce7", "#166534", "Received ✓"]
   };
-  const handleSave=()=>{onUpdate({...form,docs:client.docs});setEditing(false);};
-
-  return <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",display:"flex",alignItems:"flex-end",justifyContent:"center",zIndex:200,padding:0}}>
-    <div style={{background:"#fff",borderRadius:"20px 20px 0 0",width:"100%",maxWidth:600,maxHeight:"92vh",overflowY:"auto",padding:"20px 16px"}}>
-      <div style={{width:40,height:4,background:"#ddd",borderRadius:4,margin:"0 auto 16px"}}/>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
-        <div style={{display:"flex",gap:12,alignItems:"center"}}>
-          <Avatar name={client.name} size={44}/>
-          <div><p style={{fontWeight:700,fontSize:15,margin:0}}>{client.name}</p><p style={{fontSize:12,color:"#666",margin:"2px 0 0"}}>{client.scheme}</p></div>
-        </div>
-        <button onClick={onClose} style={{background:"#f5f5f5",border:"none",borderRadius:20,width:32,height:32,fontSize:18,display:"flex",alignItems:"center",justifyContent:"center",minWidth:"auto",padding:0}}>×</button>
-      </div>
-
-      {client.status!=="submitted"&&<div style={{background:d<0?"#FCEBEB":d<=3?"#FAECE7":"#FAEEDA",border:`1px solid ${d<0?"#F09595":d<=3?"#F0997B":"#FAC775"}`,borderRadius:10,padding:"10px 14px",marginBottom:14}}>
-        <span style={{fontSize:13,color:d<0?"#501313":"#412402",fontWeight:500}}>
-          {d<0?`⚠️ ${Math.abs(d)} days overdue — urgent!`:d===0?"🔔 Due today — submit now!!":`📅 ${d} days remaining until due date`}
-        </span>
-      </div>}
-
-      {editing?<div>
-        {[["Client Name","name","text"],["Contact Person","contact","text"],["Phone","phone","tel"],["WhatsApp No. (with country code)","whatsapp","text"],["Subsidy Scheme","scheme","text"]].map(([label,key,type])=>(
-          <div key={key} style={{marginBottom:10}}>
-            <label style={{fontSize:12,color:"#666",display:"block",marginBottom:4}}>{label}</label>
-            <input type={type} value={form[key]||""} onChange={e=>setForm({...form,[key]:e.target.value})}/>
-          </div>
-        ))}
-        {[["Sanctioned Amount (₹)","subsidyAmount","number"],["Production Date","productionDate","date"],["Due Date","dueDate","date"]].map(([label,key,type])=>(
-          <div key={key} style={{marginBottom:10}}>
-            <label style={{fontSize:12,color:"#666",display:"block",marginBottom:4}}>{label}</label>
-            <input type={type} value={form[key]||""} onChange={e=>setForm({...form,[key]:key==="subsidyAmount"?Number(e.target.value):e.target.value})}/>
-          </div>
-        ))}
-        <div style={{marginBottom:10}}>
-          <label style={{fontSize:12,color:"#666",display:"block",marginBottom:4}}>Status</label>
-          <select value={form.status} onChange={e=>setForm({...form,status:e.target.value})}>
-            <option value="pending">Pending</option><option value="overdue">Overdue</option><option value="submitted">Submitted</option>
-          </select>
-        </div>
-        <div style={{marginBottom:12}}>
-          <label style={{fontSize:12,color:"#666",display:"block",marginBottom:4}}>Notes</label>
-          <textarea value={form.notes||""} onChange={e=>setForm({...form,notes:e.target.value})} rows={2} style={{resize:"vertical"}}/>
-        </div>
-        <div style={{display:"flex",gap:8}}><button onClick={handleSave} style={{flex:1,background:"#1a1a1a",color:"#fff",border:"none",borderRadius:10}}>Save Changes</button><button onClick={()=>setEditing(false)} style={{borderRadius:10}}>Cancel</button></div>
-      </div>:<div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:14}}>
-          {[["Contact",client.contact],["Phone",client.phone],["WhatsApp",client.whatsapp?`+${client.whatsapp}`:"Not set"],["Sanctioned",fmt(client.subsidyAmount)],["Production",fmtDate(client.productionDate)],["Due Date",fmtDate(client.dueDate)]].map(([label,val])=>(
-            <div key={label}><div style={{fontSize:11,color:"#999",marginBottom:2}}>{label}</div><div style={{fontSize:13,fontWeight:600}}>{val}</div></div>
-          ))}
-          <div><div style={{fontSize:11,color:"#999",marginBottom:2}}>Status</div><Badge status={client.status}/></div>
-          {client.notes&&<div style={{gridColumn:"1/-1"}}><div style={{fontSize:11,color:"#999",marginBottom:2}}>Notes</div><div style={{fontSize:13,color:"#555"}}>{client.notes}</div></div>}
-        </div>
-
-        {client.status!=="submitted"&&client.docs.filter(x=>!x.submitted).length>0&&<div style={{background:"#f9f9f9",borderRadius:12,padding:"12px 14px",marginBottom:14}}>
-          <p style={{fontWeight:600,fontSize:13,margin:"0 0 8px"}}>WhatsApp Message Preview:</p>
-          <pre style={{fontSize:11,margin:0,whiteSpace:"pre-wrap",fontFamily:"inherit",color:"#333",lineHeight:1.6}}>{preview}</pre>
-          {client.whatsapp?<button onClick={()=>onSendWA([client])} disabled={sending} style={{width:"100%",marginTop:10,fontSize:13,background:"#25D366",color:"#fff",border:"none",borderRadius:10,padding:"10px",fontWeight:600,display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
-            📱 {sending?"Sending…":settings.instanceId?"Auto Send via API":"Open WhatsApp"}
-          </button>:<p style={{fontSize:12,color:"#c0392b",margin:"8px 0 0"}}>⚠️ Add WhatsApp number in Edit to send reminders</p>}
-        </div>}
-      </div>}
-
-      <div style={{borderTop:"1px solid #eee",paddingTop:14,marginTop:4}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-          <span style={{fontWeight:600,fontSize:14}}>Documents Checklist</span>
-          <span style={{fontSize:12,color:"#666"}}>{sub}/{client.docs.length} submitted</span>
-        </div>
-        {client.docs.map((doc,i)=>(
-          <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 0",borderBottom:"1px solid #f5f5f5"}}>
-            <div onClick={()=>handleDocChange(i,!doc.submitted)} style={{width:20,height:20,borderRadius:5,flexShrink:0,cursor:"pointer",border:doc.submitted?"none":"2px solid #ccc",background:doc.submitted?"#27ae60":"transparent",display:"flex",alignItems:"center",justifyContent:"center"}}>
-              {doc.submitted&&<span style={{color:"#fff",fontSize:13,fontWeight:700}}>✓</span>}
-            </div>
-            <span style={{fontSize:13,color:doc.submitted?"#aaa":"#1a1a1a",textDecoration:doc.submitted?"line-through":"none",flex:1,lineHeight:1.4}}>{doc.name}</span>
-          </div>
-        ))}
-      </div>
-
-      {!editing&&<div style={{display:"flex",gap:8,marginTop:16}}>
-        <button onClick={()=>setEditing(true)} style={{flex:1,borderRadius:10,background:"#1a1a1a",color:"#fff",border:"none"}}>✏️ Edit Client</button>
-        <button onClick={()=>{if(window.confirm(`Delete ${client.name}?`))onDelete(client.id);}} style={{borderRadius:10,color:"#c0392b",borderColor:"#F09595",minWidth:44}}>🗑️</button>
-      </div>}
-    </div>
-  </div>;
+  var _ref4 = map[status] || map.pending,
+    _ref5 = _slicedToArray(_ref4, 3),
+    bg = _ref5[0],
+    col = _ref5[1],
+    lbl = _ref5[2];
+  return /*#__PURE__*/React.createElement("span", {
+    style: {
+      background: bg,
+      color: col,
+      fontSize: 10,
+      fontWeight: 700,
+      padding: "2px 8px",
+      borderRadius: 20
+    }
+  }, lbl);
+}
+function Avatar(_ref6) {
+  var name = _ref6.name,
+    _ref6$size = _ref6.size,
+    size = _ref6$size === void 0 ? 40 : _ref6$size;
+  var palettes = [["#B5D4F4", "#042C53"], ["#9FE1CB", "#04342C"], ["#F5C4B3", "#4A1B0C"], ["#FAC775", "#412402"], ["#F4C0D1", "#4B1528"], ["#CED4F6", "#26215C"]];
+  var _palettes = _slicedToArray(palettes[name.charCodeAt(0) % palettes.length], 2),
+    bg = _palettes[0],
+    fg = _palettes[1];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: size,
+      height: size,
+      borderRadius: "50%",
+      background: bg,
+      color: fg,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontWeight: 700,
+      fontSize: size * 0.32,
+      flexShrink: 0
+    }
+  }, initials(name));
+}
+function Toast(_ref7) {
+  var msg = _ref7.msg,
+    type = _ref7.type,
+    onClose = _ref7.onClose;
+  useEffect(function () {
+    var t = setTimeout(onClose, 4500);
+    return function () {
+      return clearTimeout(t);
+    };
+  }, []);
+  var colors = {
+    success: ["#dcfce7", "#166534"],
+    error: ["#fce8e8", "#991b1b"],
+    info: ["#dbeafe", "#1e40af"]
+  };
+  var _ref8 = colors[type] || colors.info,
+    _ref9 = _slicedToArray(_ref8, 2),
+    bg = _ref9[0],
+    fg = _ref9[1];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      bottom: 20,
+      left: 16,
+      right: 16,
+      zIndex: 999,
+      background: bg,
+      color: fg,
+      border: "1px solid ".concat(fg, "50"),
+      borderRadius: 12,
+      padding: "12px 16px",
+      fontSize: 13,
+      display: "flex",
+      gap: 8,
+      boxShadow: "0 4px 20px rgba(0,0,0,0.15)"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      flex: 1,
+      lineHeight: 1.5
+    }
+  }, msg), /*#__PURE__*/React.createElement("button", {
+    onClick: onClose,
+    style: {
+      background: "none",
+      border: "none",
+      padding: 0,
+      fontSize: 20,
+      color: fg,
+      minWidth: "auto",
+      lineHeight: 1
+    }
+  }, "\xD7"));
+}
+function LoadingScreen() {
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      minHeight: "100vh",
+      background: "#f0f0ec"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 40,
+      marginBottom: 16
+    }
+  }, "\uD83D\uDCCA"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 18,
+      marginBottom: 8
+    }
+  }, "Subsidy Manager"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: "#6b7280",
+      marginBottom: 20
+    }
+  }, "Connecting to database\u2026"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 36,
+      height: 36,
+      border: "3px solid #e5e7eb",
+      borderTop: "3px solid #1a1a1a",
+      borderRadius: "50%",
+      animation: "spin 0.8s linear infinite"
+    }
+  }));
 }
 
-function AddClientModal({onClose,onAdd}){
-  const [form,setForm]=useState({name:"",contact:"",phone:"",whatsapp:"",scheme:"",subsidyAmount:"",productionDate:"",dueDate:"",notes:"",status:"pending"});
-  const handleSubmit=()=>{
-    if(!form.name||!form.subsidyAmount||!form.dueDate)return alert("Please fill Name, Amount and Due Date");
-    onAdd({...form,id:"c"+Date.now(),subsidyAmount:Number(form.subsidyAmount),docs:DEFAULT_DOCS.map(d=>({name:d,submitted:false}))});
+// ── SANCTION LETTER UPLOAD ────────────────────────────────────────────────────
+function FileUploadSection(_ref0) {
+  var clientId = _ref0.clientId,
+    existingFile = _ref0.existingFile,
+    whatsapp = _ref0.whatsapp,
+    clientName = _ref0.clientName,
+    settings = _ref0.settings;
+  var fileInfo = existingFile || null;
+  var _useState = useState(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    uploading = _useState2[0],
+    setUploading = _useState2[1];
+  var _useState3 = useState(false),
+    _useState4 = _slicedToArray(_useState3, 2),
+    sending = _useState4[0],
+    setSending = _useState4[1];
+  var _useState5 = useState(null),
+    _useState6 = _slicedToArray(_useState5, 2),
+    sendStatus = _useState6[0],
+    setSendStatus = _useState6[1];
+  var fmtSize = function fmtSize(b) {
+    return b < 1024 ? b + "B" : b < 1048576 ? (b / 1024).toFixed(1) + "KB" : (b / 1048576).toFixed(1) + "MB";
+  };
+  var handleUpload = function handleUpload(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var allowed = ["application/pdf", "image/jpeg", "image/png", "image/jpg"];
+    if (!allowed.includes(file.type)) {
+      alert("Only PDF, JPG or PNG allowed.");
+      return;
+    }
+    if (file.size > 900 * 1024) {
+      alert("File too large. Please use a JPG/PNG under 900KB.\nTip: Take a photo of the letter on your phone.");
+      return;
+    }
+    setUploading(true);
+    var reader = new FileReader();
+    reader.onload = /*#__PURE__*/function () {
+      var _ref1 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(ev) {
+        var data, _t;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              _context.p = 0;
+              data = {
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                base64: ev.target.result,
+                uploadedOn: new Date().toLocaleDateString("en-IN", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                })
+              };
+              _context.n = 1;
+              return db.collection("clients").doc(clientId).set({
+                sanctionLetter: data
+              }, {
+                merge: true
+              });
+            case 1:
+              setSendStatus(null);
+              _context.n = 3;
+              break;
+            case 2:
+              _context.p = 2;
+              _t = _context.v;
+              alert("Upload failed: " + _t.message);
+            case 3:
+              setUploading(false);
+            case 4:
+              return _context.a(2);
+          }
+        }, _callee, null, [[0, 2]]);
+      }));
+      return function (_x5) {
+        return _ref1.apply(this, arguments);
+      };
+    }();
+    reader.onerror = function () {
+      alert("Read failed.");
+      setUploading(false);
+    };
+    reader.readAsDataURL(file);
+  };
+  var handleDelete = /*#__PURE__*/function () {
+    var _ref10 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.n) {
+          case 0:
+            if (window.confirm("Delete this sanction letter?")) {
+              _context2.n = 1;
+              break;
+            }
+            return _context2.a(2);
+          case 1:
+            _context2.n = 2;
+            return db.collection("clients").doc(clientId).set({
+              sanctionLetter: null
+            }, {
+              merge: true
+            });
+          case 2:
+            setSendStatus(null);
+          case 3:
+            return _context2.a(2);
+        }
+      }, _callee2);
+    }));
+    return function handleDelete() {
+      return _ref10.apply(this, arguments);
+    };
+  }();
+  var handleView = function handleView() {
+    if (!fileInfo) return;
+    var w = window.open();
+    if (fileInfo.type === "application/pdf") {
+      w.document.write("<iframe src=\"".concat(fileInfo.base64, "\" style=\"position:fixed;top:0;left:0;width:100%;height:100%;border:none;\"></iframe>"));
+    } else {
+      w.document.write("<img src=\"".concat(fileInfo.base64, "\" style=\"max-width:100%;display:block;margin:20px auto;\"/>"));
+    }
+  };
+  var handleDownload = function handleDownload() {
+    if (!fileInfo) return;
+    var a = document.createElement("a");
+    a.href = fileInfo.base64;
+    a.download = fileInfo.name;
+    a.click();
+  };
+  var handleSendWA = /*#__PURE__*/function () {
+    var _ref11 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+      var caption, txt, isImg, endpoint, params, res, data, _t2;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
+          case 0:
+            if (fileInfo) {
+              _context3.n = 1;
+              break;
+            }
+            alert("No file uploaded.");
+            return _context3.a(2);
+          case 1:
+            if (whatsapp) {
+              _context3.n = 2;
+              break;
+            }
+            alert("No WhatsApp number for this client.");
+            return _context3.a(2);
+          case 2:
+            caption = "Dear ".concat(clientName, ",\n\nPlease find your Sanction Letter attached.\n\nRegards,\n").concat(settings.officeName || "Our CA Office", "\n").concat(settings.officePhone || "");
+            if (!(!settings.instanceId || !settings.apiToken)) {
+              _context3.n = 3;
+              break;
+            }
+            txt = "Dear ".concat(clientName, " ji,\n\nYour Sanction Letter is ready. Please contact us to receive the document.\n\nRegards,\n").concat(settings.officeName || "Our CA Office");
+            window.open("https://wa.me/".concat(whatsapp.replace(/\D/g, ""), "?text=").concat(encodeURIComponent(txt)), "_blank");
+            setSendStatus({
+              type: "info",
+              msg: "WhatsApp opened. Add UltraMsg API in Settings to auto-send the file."
+            });
+            return _context3.a(2);
+          case 3:
+            setSending(true);
+            setSendStatus(null);
+            _context3.p = 4;
+            isImg = ["image/jpeg", "image/png", "image/jpg"].includes(fileInfo.type);
+            endpoint = isImg ? "messages/image" : "messages/document";
+            params = {
+              token: settings.apiToken,
+              to: whatsapp.replace(/\D/g, "") + "@c.us",
+              caption: caption
+            };
+            if (isImg) {
+              params.image = fileInfo.base64;
+            } else {
+              params.document = fileInfo.base64;
+              params.filename = fileInfo.name;
+            }
+            _context3.n = 5;
+            return fetch("https://api.ultramsg.com/".concat(settings.instanceId, "/").concat(endpoint), {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              body: new URLSearchParams(params).toString()
+            });
+          case 5:
+            res = _context3.v;
+            _context3.n = 6;
+            return res.json();
+          case 6:
+            data = _context3.v;
+            if (!(!res.ok || data.sent === false)) {
+              _context3.n = 7;
+              break;
+            }
+            throw new Error(data.message || "Send failed");
+          case 7:
+            setSendStatus({
+              type: "success",
+              msg: "\u2705 Sanction Letter sent to ".concat(clientName, " on WhatsApp!")
+            });
+            _context3.n = 9;
+            break;
+          case 8:
+            _context3.p = 8;
+            _t2 = _context3.v;
+            setSendStatus({
+              type: "error",
+              msg: "❌ Failed: " + _t2.message
+            });
+          case 9:
+            setSending(false);
+          case 10:
+            return _context3.a(2);
+        }
+      }, _callee3, null, [[4, 8]]);
+    }));
+    return function handleSendWA() {
+      return _ref11.apply(this, arguments);
+    };
+  }();
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#f9fafb",
+      border: "1px solid #e5e7eb",
+      borderRadius: 10,
+      padding: "12px 14px",
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 13,
+      color: "#374151",
+      marginBottom: 8
+    }
+  }, "\uD83D\uDCCE Sanction Letter"), fileInfo ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      border: "1px solid #e5e7eb",
+      borderRadius: 8,
+      padding: "10px 12px",
+      marginBottom: 8,
+      display: "flex",
+      gap: 10,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 28,
+      flexShrink: 0
+    }
+  }, fileInfo.type === "application/pdf" ? "📄" : "🖼️"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      minWidth: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 600,
+      fontSize: 13,
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis"
+    }
+  }, fileInfo.name), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      marginTop: 2
+    }
+  }, fmtSize(fileInfo.size), " \xB7 ", fileInfo.uploadedOn))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 8,
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: handleView,
+    style: {
+      fontSize: 12,
+      borderRadius: 8,
+      background: "#eff6ff",
+      color: "#1d4ed8",
+      borderColor: "#bfdbfe",
+      fontWeight: 600
+    }
+  }, "\uD83D\uDC41\uFE0F View"), /*#__PURE__*/React.createElement("button", {
+    onClick: handleDownload,
+    style: {
+      fontSize: 12,
+      borderRadius: 8,
+      background: "#f0fdf4",
+      color: "#15803d",
+      borderColor: "#86efac",
+      fontWeight: 600
+    }
+  }, "\u2B07\uFE0F Download")), /*#__PURE__*/React.createElement("button", {
+    onClick: handleSendWA,
+    disabled: sending,
+    style: {
+      width: "100%",
+      fontSize: 13,
+      background: "#25D366",
+      color: "#fff",
+      border: "none",
+      borderRadius: 8,
+      padding: 10,
+      fontWeight: 700,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 6,
+      marginBottom: 8,
+      cursor: sending ? "not-allowed" : "pointer"
+    }
+  }, "\uD83D\uDCF1 ", sending ? "Sending…" : "Send Sanction Letter on WhatsApp"), sendStatus && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: sendStatus.type === "success" ? "#f0fdf4" : sendStatus.type === "error" ? "#fef2f2" : "#eff6ff",
+      border: "1px solid ".concat(sendStatus.type === "success" ? "#86efac" : sendStatus.type === "error" ? "#fca5a5" : "#93c5fd"),
+      borderRadius: 8,
+      padding: "8px 10px",
+      fontSize: 12,
+      color: sendStatus.type === "success" ? "#166534" : sendStatus.type === "error" ? "#991b1b" : "#1e40af",
+      marginBottom: 8
+    }
+  }, sendStatus.msg), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      flex: 1,
+      display: "block",
+      background: "#f3f4f6",
+      color: "#374151",
+      borderRadius: 8,
+      padding: 8,
+      textAlign: "center",
+      fontSize: 12,
+      fontWeight: 600,
+      cursor: "pointer",
+      border: "1px solid #e5e7eb"
+    }
+  }, uploading ? "Uploading…" : "🔄 Replace File", /*#__PURE__*/React.createElement("input", {
+    type: "file",
+    accept: ".pdf,.jpg,.jpeg,.png",
+    onChange: handleUpload,
+    style: {
+      display: "none"
+    },
+    disabled: uploading
+  })), /*#__PURE__*/React.createElement("button", {
+    onClick: handleDelete,
+    style: {
+      fontSize: 12,
+      borderRadius: 8,
+      color: "#dc2626",
+      borderColor: "#fca5a5",
+      minWidth: 44
+    }
+  }, "\uD83D\uDDD1\uFE0F"))) : /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: "8px 0",
+      color: "#9ca3af",
+      fontSize: 12,
+      marginBottom: 8
+    }
+  }, "No sanction letter uploaded yet"), /*#__PURE__*/React.createElement("label", {
+    style: {
+      display: "block",
+      background: "#1a1a1a",
+      color: "#fff",
+      borderRadius: 8,
+      padding: 10,
+      textAlign: "center",
+      fontSize: 13,
+      fontWeight: 700,
+      cursor: uploading ? "not-allowed" : "pointer",
+      opacity: uploading ? 0.6 : 1
+    }
+  }, uploading ? "Uploading…" : "⬆️ Upload Sanction Letter", /*#__PURE__*/React.createElement("input", {
+    type: "file",
+    accept: ".pdf,.jpg,.jpeg,.png",
+    onChange: handleUpload,
+    style: {
+      display: "none"
+    },
+    disabled: uploading
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#9ca3af",
+      textAlign: "center",
+      marginTop: 4
+    }
+  }, "JPG or PNG under 900KB \xB7 PDF also supported")));
+}
+
+// ── INSTALLMENT CARD ──────────────────────────────────────────────────────────
+function InstallmentCard(_ref12) {
+  var inst = _ref12.inst,
+    _onChange = _ref12.onChange;
+  var _useState7 = useState(false),
+    _useState8 = _slicedToArray(_useState7, 2),
+    open = _useState8[0],
+    setOpen = _useState8[1];
+  var d = inst.dueDate ? daysUntil(inst.dueDate) : null;
+  var isOver = d !== null && d < 0 && inst.status !== "received";
+  var dotBg = inst.status === "received" ? "#22c55e" : inst.status === "claim_filed" ? "#3b82f6" : isOver ? "#ef4444" : "#d1d5db";
+  var borderClr = isOver ? "#fca5a5" : inst.status === "received" ? "#86efac" : "#e5e7eb";
+  var rowBg = inst.status === "received" ? "#f0fdf4" : isOver ? "#fef2f2" : "#fff";
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: "1px solid ".concat(borderClr),
+      borderRadius: 12,
+      marginBottom: 10,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    onClick: function onClick() {
+      return setOpen(function (o) {
+        return !o;
+      });
+    },
+    style: {
+      padding: "12px 14px",
+      background: rowBg,
+      cursor: "pointer",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 32,
+      height: 32,
+      borderRadius: "50%",
+      background: dotBg,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: "#fff",
+      fontWeight: 700,
+      fontSize: 13,
+      flexShrink: 0
+    }
+  }, inst.no), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 13
+    }
+  }, inst.no === 1 ? "1st Installment — Auto Release" : "Installment ".concat(inst.no, " \u2014 ").concat(inst.claimRequired ? "Claim Required" : "Auto Release")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      marginTop: 1
+    }
+  }, "Due: ", fmtDate(inst.dueDate), " \xB7 ", fmt(inst.amount)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      alignItems: "center",
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement(InstBadge, {
+    status: inst.status
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14,
+      color: "#9ca3af"
+    }
+  }, open ? "▲" : "▼"))), open && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 14px",
+      background: "#fafafa",
+      borderTop: "1px solid #f0f0f0"
+    }
+  }, isOver && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fef2f2",
+      border: "1px solid #fca5a5",
+      borderRadius: 8,
+      padding: "7px 12px",
+      marginBottom: 10,
+      fontSize: 12,
+      color: "#991b1b",
+      fontWeight: 600
+    }
+  }, "\u26A0\uFE0F Overdue by ", Math.abs(d), " days"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#f9fafb",
+      borderRadius: 8,
+      padding: "7px 12px",
+      marginBottom: 10,
+      fontSize: 12
+    }
+  }, /*#__PURE__*/React.createElement("b", null, "Due Date:"), " ", /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: isOver ? "#dc2626" : "#166534",
+      fontWeight: 700
+    }
+  }, fmtDate(inst.dueDate) || "Set production date first"), !inst.claimRequired && /*#__PURE__*/React.createElement("span", {
+    style: {
+      marginLeft: 8,
+      background: "#fffbeb",
+      color: "#92400e",
+      fontSize: 10,
+      padding: "1px 6px",
+      borderRadius: 10,
+      fontWeight: 600
+    }
+  }, "No Claim Needed")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "INSTALLMENT AMOUNT (\u20B9)"), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    value: inst.amount,
+    onChange: function onChange(e) {
+      return _onChange(_objectSpread(_objectSpread({}, inst), {}, {
+        amount: Number(e.target.value)
+      }));
+    }
+  })), !inst.claimRequired && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fffbeb",
+      border: "1px solid #fde68a",
+      borderRadius: 8,
+      padding: "8px 12px",
+      marginBottom: 10,
+      fontSize: 12,
+      color: "#92400e"
+    }
+  }, "\u2139\uFE0F No claim documents needed. Released after Sanction Letter receipt / as per government funds."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "SANCTION LETTER RECEIPT DATE"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    value: inst.sanctionLetterDate || "",
+    onChange: function onChange(e) {
+      return _onChange(_objectSpread(_objectSpread({}, inst), {}, {
+        sanctionLetterDate: e.target.value
+      }));
+    }
+  }), inst.sanctionLetterDate && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#059669",
+      marginTop: 3
+    }
+  }, "\u2713 ", fmtDate(inst.sanctionLetterDate)))), inst.claimRequired && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#eff6ff",
+      border: "1px solid #bfdbfe",
+      borderRadius: 8,
+      padding: "8px 12px",
+      marginBottom: 10,
+      fontSize: 12,
+      color: "#1e40af"
+    }
+  }, "\uD83D\uDCCB File claim documents before due date."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "CLAIM FILED DATE"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    value: inst.claimFiledDate || "",
+    onChange: function onChange(e) {
+      var newStatus = e.target.value && inst.status === "pending" ? "claim_filed" : inst.status;
+      _onChange(_objectSpread(_objectSpread({}, inst), {}, {
+        claimFiledDate: e.target.value,
+        status: newStatus
+      }));
+    }
+  }), inst.claimFiledDate && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#059669",
+      marginTop: 3
+    }
+  }, "\u2713 Filed on ", fmtDate(inst.claimFiledDate)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "AMOUNT RECEIVED DATE"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    value: inst.receivedDate || "",
+    onChange: function onChange(e) {
+      return _onChange(_objectSpread(_objectSpread({}, inst), {}, {
+        receivedDate: e.target.value,
+        status: e.target.value ? "received" : inst.status
+      }));
+    }
+  }), inst.receivedDate && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#059669",
+      marginTop: 3
+    }
+  }, "\u2713 Received on ", fmtDate(inst.receivedDate))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "STATUS"), /*#__PURE__*/React.createElement("select", {
+    value: inst.status,
+    onChange: function onChange(e) {
+      return _onChange(_objectSpread(_objectSpread({}, inst), {}, {
+        status: e.target.value
+      }));
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "pending"
+  }, "\u23F3 Pending"), inst.claimRequired && /*#__PURE__*/React.createElement("option", {
+    value: "claim_filed"
+  }, "\uD83D\uDCE4 Claim Filed"), /*#__PURE__*/React.createElement("option", {
+    value: "received"
+  }, "\u2705 Amount Received"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#f0fdf4",
+      border: "1px solid #86efac",
+      borderRadius: 8,
+      padding: "10px 12px",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 12,
+      color: "#166534",
+      marginBottom: 6
+    }
+  }, "\uD83D\uDCBC Fees for this Installment"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "FEES DUE (\u20B9)"), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    value: inst.feesDue || 0,
+    onChange: function onChange(e) {
+      return _onChange(_objectSpread(_objectSpread({}, inst), {}, {
+        feesDue: Number(e.target.value)
+      }));
+    }
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "FEES RECEIVED (\u20B9)"), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    value: inst.feesReceived || 0,
+    onChange: function onChange(e) {
+      return _onChange(_objectSpread(_objectSpread({}, inst), {}, {
+        feesReceived: Number(e.target.value)
+      }));
+    }
+  }))), (inst.feesDue || 0) > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 6,
+      fontSize: 11,
+      fontWeight: 600,
+      color: (inst.feesDue || 0) - (inst.feesReceived || 0) > 0 ? "#dc2626" : "#16a34a"
+    }
+  }, (inst.feesDue || 0) === (inst.feesReceived || 0) ? "✅ Fees fully received" : "\u26A0\uFE0F ".concat(fmt((inst.feesDue || 0) - (inst.feesReceived || 0)), " pending"))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "NOTES"), /*#__PURE__*/React.createElement("textarea", {
+    rows: 2,
+    value: inst.notes || "",
+    onChange: function onChange(e) {
+      return _onChange(_objectSpread(_objectSpread({}, inst), {}, {
+        notes: e.target.value
+      }));
+    },
+    style: {
+      resize: "vertical",
+      fontSize: 13
+    }
+  }))));
+}
+
+// ── INSTALLMENT DOTS (extracted helper) ───────────────────────────────────────
+function InstDots(_ref13) {
+  var installments = _ref13.installments;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 3,
+      alignItems: "center"
+    }
+  }, installments.map(function (inst) {
+    var dd = inst.dueDate ? daysUntil(inst.dueDate) : null;
+    var over = dd !== null && dd < 0 && inst.status !== "received";
+    var bg = inst.status === "received" ? "#22c55e" : inst.status === "claim_filed" ? "#3b82f6" : over ? "#ef4444" : "#d1d5db";
+    return /*#__PURE__*/React.createElement("div", {
+      key: inst.no,
+      title: "Inst ".concat(inst.no),
+      style: {
+        flex: 1,
+        height: 6,
+        borderRadius: 3,
+        background: bg
+      }
+    });
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: "#9ca3af",
+      marginLeft: 4,
+      whiteSpace: "nowrap"
+    }
+  }, installments.filter(function (i) {
+    return i.status === "received";
+  }).length, "/", installments.length));
+}
+
+// ── CLIENT CARD ───────────────────────────────────────────────────────────────
+function ClientCard(_ref14) {
+  var client = _ref14.client,
+    onClick = _ref14.onClick,
+    onQuickWA = _ref14.onQuickWA;
+  var status = effectiveStatus(client);
+  var totalRec = client.installments.filter(function (i) {
+    return i.status === "received";
+  }).reduce(function (s, i) {
+    return s + Number(i.amount);
+  }, 0);
+  var total = Number(client.subsidyAmount) || 0;
+  var pct = total > 0 ? Math.min(100, Math.round(totalRec / total * 100)) : 0;
+  var pendingDocs = client.docs.filter(function (x) {
+    return !x.submitted;
+  }).length;
+  var next = client.installments.find(function (i) {
+    return i.status !== "received";
+  });
+  var feesBal = client.installments.reduce(function (s, i) {
+    return s + Number(i.feesDue || 0) - Number(i.feesReceived || 0);
+  }, 0);
+  var nd = next && next.dueDate ? daysUntil(next.dueDate) : null;
+  var dueDateColor = nd !== null && nd < 0 ? "#dc2626" : "#1a1a1a";
+  return /*#__PURE__*/React.createElement("div", {
+    onClick: onClick,
+    style: {
+      background: "#fff",
+      border: "1px solid #e5e7eb",
+      borderRadius: 14,
+      padding: "14px 16px",
+      marginBottom: 10,
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      alignItems: "flex-start",
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement(Avatar, {
+    name: client.name,
+    size: 38
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      minWidth: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      gap: 6,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 700,
+      fontSize: 14,
+      margin: 0,
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
+      maxWidth: 160
+    }
+  }, client.name), /*#__PURE__*/React.createElement(Badge, {
+    status: status
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      alignItems: "center",
+      marginTop: 3,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement(SchemeBadge, {
+    schemeKey: client.schemeKey
+  }), client.district && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: "#6b7280"
+    }
+  }, "\uD83D\uDCCD ", client.district)))), client.dic && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      marginBottom: 8
+    }
+  }, "\uD83C\uDFDB\uFE0F ", client.dic), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 8,
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#9ca3af",
+      marginBottom: 2
+    }
+  }, "Sanctioned"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      fontWeight: 700
+    }
+  }, fmt(total))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#9ca3af",
+      marginBottom: 2
+    }
+  }, "Next Due"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: dueDateColor
+    }
+  }, next ? fmtDate(next.dueDate) : "All done ✓"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 3
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280"
+    }
+  }, "Subsidy Received"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280"
+    }
+  }, fmt(totalRec), " / ", fmt(total))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 5,
+      background: "#f3f4f6",
+      borderRadius: 4,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: "100%",
+      width: "".concat(pct, "%"),
+      background: pct === 100 ? "#22c55e" : "#3b82f6",
+      borderRadius: 4
+    }
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement(InstDots, {
+    installments: client.installments
+  })), feesBal > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fffbeb",
+      border: "1px solid #fde68a",
+      borderRadius: 8,
+      padding: "5px 10px",
+      marginBottom: 8,
+      display: "flex",
+      justifyContent: "space-between"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "#92400e"
+    }
+  }, "\uD83D\uDCBC Fees Balance"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      fontWeight: 700,
+      color: "#b45309"
+    }
+  }, fmt(feesBal), " pending")), client.sanctionLetter && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#f0fdf4",
+      border: "1px solid #86efac",
+      borderRadius: 8,
+      padding: "5px 10px",
+      marginBottom: 8,
+      fontSize: 11,
+      color: "#166534",
+      fontWeight: 600
+    }
+  }, "\uD83D\uDCCE Sanction Letter uploaded \u2713"), status !== "submitted" && client.whatsapp && pendingDocs > 0 && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick(e) {
+      e.stopPropagation();
+      onQuickWA(client);
+    },
+    style: {
+      width: "100%",
+      fontSize: 13,
+      background: "#25D366",
+      color: "#fff",
+      border: "none",
+      borderRadius: 10,
+      padding: 9,
+      fontWeight: 700,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 6
+    }
+  }, "\uD83D\uDCF1 Send WhatsApp Reminder"));
+}
+
+// ── CLIENT DETAIL ─────────────────────────────────────────────────────────────
+function ClientDetail(_ref15) {
+  var client = _ref15.client,
+    onClose = _ref15.onClose,
+    onUpdate = _ref15.onUpdate,
+    onDelete = _ref15.onDelete,
+    settings = _ref15.settings,
+    onSendWA = _ref15.onSendWA,
+    sending = _ref15.sending;
+  var _useState9 = useState("info"),
+    _useState0 = _slicedToArray(_useState9, 2),
+    tab = _useState0[0],
+    setTab = _useState0[1];
+  var _useState1 = useState(false),
+    _useState10 = _slicedToArray(_useState1, 2),
+    editing = _useState10[0],
+    setEditing = _useState10[1];
+  var _useState11 = useState(_objectSpread({}, client)),
+    _useState12 = _slicedToArray(_useState11, 2),
+    form = _useState12[0],
+    setForm = _useState12[1];
+  var _useState13 = useState(false),
+    _useState14 = _slicedToArray(_useState13, 2),
+    saving = _useState14[0],
+    setSaving = _useState14[1];
+  var status = effectiveStatus(client);
+  var scheme = SCHEMES[client.schemeKey] || SCHEMES.msmep2025;
+  var next = client.installments.find(function (i) {
+    return i.status !== "received";
+  });
+  var d = next && next.dueDate ? daysUntil(next.dueDate) : null;
+  var totalRec = client.installments.filter(function (i) {
+    return i.status === "received";
+  }).reduce(function (s, i) {
+    return s + Number(i.amount);
+  }, 0);
+  var docSub = client.docs.filter(function (x) {
+    return x.submitted;
+  }).length;
+  var instFeesDue = client.installments.reduce(function (s, i) {
+    return s + Number(i.feesDue || 0);
+  }, 0);
+  var instFeesRec = client.installments.reduce(function (s, i) {
+    return s + Number(i.feesReceived || 0);
+  }, 0);
+  var feesBal = instFeesDue - instFeesRec;
+  var handleDocChange = function handleDocChange(idx, val) {
+    var docs = client.docs.map(function (dd, i) {
+      return i === idx ? _objectSpread(_objectSpread({}, dd), {}, {
+        submitted: val
+      }) : dd;
+    });
+    onUpdate(_objectSpread(_objectSpread({}, client), {}, {
+      docs: docs
+    }));
+  };
+  var handleInstChange = function handleInstChange(idx, updated) {
+    var insts = client.installments.map(function (inst, i) {
+      return i === idx ? updated : inst;
+    });
+    onUpdate(_objectSpread(_objectSpread({}, client), {}, {
+      installments: insts
+    }));
+  };
+  var handleSave = /*#__PURE__*/function () {
+    var _ref16 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+      var sk, ns, cnt, newInsts;
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.n) {
+          case 0:
+            setSaving(true);
+            sk = form.schemeKey;
+            ns = SCHEMES[sk];
+            cnt = ns.installmentCount;
+            newInsts = Array.from({
+              length: cnt
+            }, function (_, i) {
+              var ex = form.installments[i] || {};
+              return {
+                no: i + 1,
+                amount: ex.amount || Math.round((Number(form.subsidyAmount) || 0) / cnt),
+                dueDate: addYears(form.productionDate, i),
+                claimRequired: ns.claimRequired(i + 1),
+                sanctionLetterDate: ex.sanctionLetterDate || "",
+                claimFiledDate: ex.claimFiledDate || "",
+                receivedDate: ex.receivedDate || "",
+                status: ex.status || "pending",
+                feesDue: ex.feesDue || 0,
+                feesReceived: ex.feesReceived || 0,
+                notes: ex.notes || ""
+              };
+            });
+            _context4.n = 1;
+            return onUpdate(_objectSpread(_objectSpread({}, form), {}, {
+              installments: newInsts,
+              subsidyAmount: Number(form.subsidyAmount) || 0
+            }));
+          case 1:
+            setSaving(false);
+            setEditing(false);
+          case 2:
+            return _context4.a(2);
+        }
+      }, _callee4);
+    }));
+    return function handleSave() {
+      return _ref16.apply(this, arguments);
+    };
+  }();
+  var alertColor = d === null ? "#166534" : d < 0 ? "#991b1b" : d <= 30 ? "#92400e" : "#166534";
+  var alertBg = d === null ? "#f0fdf4" : d < 0 ? "#fef2f2" : d <= 30 ? "#fffbeb" : "#f0fdf4";
+  var alertBorder = d === null ? "#86efac" : d < 0 ? "#fca5a5" : d <= 30 ? "#fde68a" : "#86efac";
+  var alertMsg = d === null ? "✅ All installments complete." : d < 0 ? "\u26A0\uFE0F Inst.".concat(next.no, ": ").concat(Math.abs(d), " days overdue!") : d === 0 ? "\uD83D\uDD14 Inst.".concat(next.no, " due today!") : "\uD83D\uDCC5 Inst.".concat(next.no, " due in ").concat(d, " days (").concat(fmtDate(next.dueDate), ") \xB7 ").concat(next.claimRequired ? "Claim required" : "Auto release");
+  var TABS = [{
+    k: "info",
+    l: "📋 Info"
+  }, {
+    k: "installments",
+    l: "\uD83D\uDCB0 (".concat(client.installments.length, ")")
+  }, {
+    k: "docs",
+    l: "📄 Docs"
+  }, {
+    k: "fees",
+    l: "💼 Fees"
+  }, {
+    k: "wa",
+    l: "📱 WA"
+  }];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.5)",
+      display: "flex",
+      alignItems: "flex-end",
+      justifyContent: "center",
+      zIndex: 200
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: "20px 20px 0 0",
+      width: "100%",
+      maxWidth: 600,
+      maxHeight: "93vh",
+      display: "flex",
+      flexDirection: "column"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 16px 0",
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 40,
+      height: 4,
+      background: "#e5e7eb",
+      borderRadius: 4,
+      margin: "0 auto 12px"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement(Avatar, {
+    name: client.name,
+    size: 42
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 700,
+      fontSize: 15,
+      margin: 0
+    }
+  }, client.name), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      alignItems: "center",
+      marginTop: 3,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement(SchemeBadge, {
+    schemeKey: client.schemeKey
+  }), client.district && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280"
+    }
+  }, "\uD83D\uDCCD ", client.district), client.dic && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280"
+    }
+  }, "\uD83C\uDFDB\uFE0F ", client.dic)))), /*#__PURE__*/React.createElement("button", {
+    onClick: onClose,
+    style: {
+      background: "#f3f4f6",
+      border: "none",
+      borderRadius: 50,
+      width: 32,
+      height: 32,
+      minWidth: 32,
+      fontSize: 20,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 0
+    }
+  }, "\xD7")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: alertBg,
+      border: "1px solid ".concat(alertBorder),
+      borderRadius: 8,
+      padding: "8px 12px",
+      marginBottom: 8,
+      fontSize: 12,
+      fontWeight: 700,
+      color: alertColor
+    }
+  }, alertMsg), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      overflowX: "auto",
+      borderBottom: "2px solid #f3f4f6"
+    }
+  }, TABS.map(function (t) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: t.k,
+      onClick: function onClick() {
+        return setTab(t.k);
+      },
+      style: {
+        fontSize: 12,
+        border: "none",
+        borderBottom: tab === t.k ? "3px solid #1a1a1a" : "3px solid transparent",
+        borderRadius: 0,
+        background: "none",
+        padding: "7px 10px",
+        color: tab === t.k ? "#1a1a1a" : "#9ca3af",
+        fontWeight: tab === t.k ? 700 : 400,
+        whiteSpace: "nowrap",
+        cursor: "pointer"
+      }
+    }, t.l);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      overflowY: "auto",
+      flex: 1,
+      padding: "14px 16px 28px"
+    }
+  }, tab === "info" && (editing ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "Scheme *"), /*#__PURE__*/React.createElement("select", {
+    value: form.schemeKey,
+    onChange: function onChange(e) {
+      var sk = e.target.value;
+      var ns = SCHEMES[sk];
+      var ni = Array.from({
+        length: ns.installmentCount
+      }, function (_, i) {
+        var ex = form.installments[i] || {};
+        return {
+          no: i + 1,
+          amount: ex.amount || Math.round((Number(form.subsidyAmount) || 0) / ns.installmentCount),
+          dueDate: addYears(form.productionDate, i),
+          claimRequired: ns.claimRequired(i + 1),
+          sanctionLetterDate: ex.sanctionLetterDate || "",
+          claimFiledDate: ex.claimFiledDate || "",
+          receivedDate: ex.receivedDate || "",
+          status: ex.status || "pending",
+          feesDue: ex.feesDue || 0,
+          feesReceived: ex.feesReceived || 0,
+          notes: ex.notes || ""
+        };
+      });
+      setForm(_objectSpread(_objectSpread({}, form), {}, {
+        schemeKey: sk,
+        installments: ni
+      }));
+    }
+  }, Object.keys(SCHEMES).map(function (k) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: k,
+      value: k
+    }, SCHEMES[k].label);
+  })), form.schemeKey && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: SCHEMES[form.schemeKey].color,
+      marginTop: 3,
+      fontWeight: 600
+    }
+  }, SCHEMES[form.schemeKey].description)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "District"), /*#__PURE__*/React.createElement("select", {
+    value: form.district || "",
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        district: e.target.value,
+        dic: getDIC(e.target.value)
+      }));
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: ""
+  }, "-- Select District --"), MP_DISTRICTS.map(function (d) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: d,
+      value: d
+    }, d);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "DIC"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: form.dic || "",
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        dic: e.target.value
+      }));
+    }
+  })), [["Client Name", "name", "text"], ["Contact Person", "contact", "text"], ["Phone", "phone", "tel"], ["WhatsApp (e.g. 919876543210)", "whatsapp", "text"]].map(function (_ref17) {
+    var _ref18 = _slicedToArray(_ref17, 3),
+      label = _ref18[0],
+      key = _ref18[1],
+      type = _ref18[2];
+    return /*#__PURE__*/React.createElement("div", {
+      key: key,
+      style: {
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("label", {
+      style: {
+        fontSize: 12,
+        color: "#6b7280",
+        display: "block",
+        marginBottom: 3
+      }
+    }, label), /*#__PURE__*/React.createElement("input", {
+      type: type,
+      value: form[key] || "",
+      onChange: function onChange(e) {
+        return setForm(_objectSpread(_objectSpread({}, form), {}, _defineProperty({}, key, e.target.value)));
+      }
+    }));
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "Sanctioned Amount (\u20B9)"), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    value: form.subsidyAmount || 0,
+    onChange: function onChange(e) {
+      var amt = Number(e.target.value) || 0;
+      var cnt = (SCHEMES[form.schemeKey] || SCHEMES.msmep2025).installmentCount;
+      var ni = form.installments.map(function (inst) {
+        return _objectSpread(_objectSpread({}, inst), {}, {
+          amount: Math.round(amt / cnt)
+        });
+      });
+      setForm(_objectSpread(_objectSpread({}, form), {}, {
+        subsidyAmount: amt,
+        installments: ni
+      }));
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "Date of Production \u26A0\uFE0F Auto-sets all due dates"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    value: form.productionDate || "",
+    onChange: function onChange(e) {
+      var pd = e.target.value;
+      var ni = form.installments.map(function (inst, i) {
+        return _objectSpread(_objectSpread({}, inst), {}, {
+          dueDate: addYears(pd, i)
+        });
+      });
+      setForm(_objectSpread(_objectSpread({}, form), {}, {
+        productionDate: pd,
+        installments: ni
+      }));
+    }
+  }), form.productionDate && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#059669",
+      marginTop: 3
+    }
+  }, "1st: ", fmtDate(form.productionDate), " \xB7 2nd: ", fmtDate(addYears(form.productionDate, 1)), " \xB7 3rd: ", fmtDate(addYears(form.productionDate, 2)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "Status"), /*#__PURE__*/React.createElement("select", {
+    value: form.status,
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        status: e.target.value
+      }));
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "pending"
+  }, "Pending"), /*#__PURE__*/React.createElement("option", {
+    value: "submitted"
+  }, "Fully Closed"))), [["📥 Docs Received from Client", "docsReceivedDate"], ["📤 Docs Submitted to Department", "docsSubmittedDate"]].map(function (_ref19) {
+    var _ref20 = _slicedToArray(_ref19, 2),
+      label = _ref20[0],
+      key = _ref20[1];
+    return /*#__PURE__*/React.createElement("div", {
+      key: key,
+      style: {
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("label", {
+      style: {
+        fontSize: 12,
+        color: "#6b7280",
+        display: "block",
+        marginBottom: 3
+      }
+    }, label), /*#__PURE__*/React.createElement("input", {
+      type: "date",
+      value: form[key] || "",
+      onChange: function onChange(e) {
+        return setForm(_objectSpread(_objectSpread({}, form), {}, _defineProperty({}, key, e.target.value)));
+      }
+    }));
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "Notes"), /*#__PURE__*/React.createElement("textarea", {
+    rows: 2,
+    value: form.notes || "",
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        notes: e.target.value
+      }));
+    },
+    style: {
+      resize: "vertical"
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: handleSave,
+    disabled: saving,
+    style: {
+      flex: 1,
+      background: "#1a1a1a",
+      color: "#fff",
+      border: "none",
+      borderRadius: 10,
+      fontWeight: 700
+    }
+  }, saving ? "Saving…" : "Save Changes"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setEditing(false);
+    },
+    style: {
+      borderRadius: 10
+    }
+  }, "Cancel"))) : /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: scheme.bg,
+      border: "1px solid ".concat(scheme.color, "40"),
+      borderRadius: 10,
+      padding: "10px 14px",
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 700,
+      fontSize: 14,
+      color: scheme.color
+    }
+  }, scheme.label), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11,
+      color: scheme.color
+    }
+  }, client.installments.length, " installments")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: scheme.color,
+      marginTop: 3
+    }
+  }, scheme.description)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 10,
+      marginBottom: 12
+    }
+  }, [["District", client.district || "—"], ["DIC", client.dic || "—"], ["Contact", client.contact || "—"], ["Phone", client.phone || "—"], ["WhatsApp", client.whatsapp ? "+" + client.whatsapp : "Not set"], ["Production Date", fmtDate(client.productionDate)], ["Docs from Client", fmtDate(client.docsReceivedDate)], ["Docs to Dept.", fmtDate(client.docsSubmittedDate)]].map(function (_ref21) {
+    var _ref22 = _slicedToArray(_ref21, 2),
+      label = _ref22[0],
+      val = _ref22[1];
+    return /*#__PURE__*/React.createElement("div", {
+      key: label
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        color: "#9ca3af",
+        marginBottom: 2
+      }
+    }, label), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        fontWeight: 600
+      }
+    }, val));
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      gridColumn: "1/-1"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#9ca3af",
+      marginBottom: 2
+    }
+  }, "Status"), /*#__PURE__*/React.createElement(Badge, {
+    status: status
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#eff6ff",
+      border: "1px solid #bfdbfe",
+      borderRadius: 10,
+      padding: 12,
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 13,
+      marginBottom: 8,
+      color: "#1e40af"
+    }
+  }, "\uD83D\uDCB0 Subsidy Summary"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#6b7280"
+    }
+  }, "Sanctioned"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700
+    }
+  }, fmt(client.subsidyAmount))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#6b7280"
+    }
+  }, "Received"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: "#16a34a"
+    }
+  }, fmt(totalRec))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#6b7280"
+    }
+  }, "Balance"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: Number(client.subsidyAmount) - totalRec > 0 ? "#dc2626" : "#16a34a"
+    }
+  }, fmt(Number(client.subsidyAmount) - totalRec))))), client.notes && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#f9fafb",
+      borderRadius: 8,
+      padding: "8px 12px",
+      marginBottom: 12,
+      fontSize: 13,
+      color: "#374151"
+    }
+  }, client.notes), /*#__PURE__*/React.createElement(FileUploadSection, {
+    clientId: client.id,
+    existingFile: client.sanctionLetter || null,
+    whatsapp: client.whatsapp,
+    clientName: client.contact || client.name,
+    settings: settings
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setEditing(true);
+    },
+    style: {
+      flex: 1,
+      background: "#1a1a1a",
+      color: "#fff",
+      border: "none",
+      borderRadius: 10,
+      fontWeight: 700
+    }
+  }, "\u270F\uFE0F Edit"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      if (window.confirm("Delete ".concat(client.name, "?"))) onDelete(client.id);
+    },
+    style: {
+      borderRadius: 10,
+      color: "#dc2626",
+      borderColor: "#fca5a5",
+      minWidth: 44
+    }
+  }, "\uD83D\uDDD1\uFE0F")))), tab === "installments" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: scheme.bg,
+      border: "1px solid ".concat(scheme.color, "40"),
+      borderRadius: 10,
+      padding: "10px 14px",
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 13,
+      color: scheme.color,
+      marginBottom: 4
+    }
+  }, scheme.label, " \u2014 Rules"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: scheme.color
+    }
+  }, scheme.description)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "repeat(".concat(Math.min(client.installments.length, 4), ", 1fr)"),
+      gap: 5,
+      marginBottom: 12
+    }
+  }, client.installments.map(function (inst) {
+    var dd = inst.dueDate ? daysUntil(inst.dueDate) : null;
+    var over = dd !== null && dd < 0 && inst.status !== "received";
+    var icon = inst.status === "received" ? "✅" : over ? "🔴" : inst.status === "claim_filed" ? "📤" : "⏳";
+    var instBg = inst.status === "received" ? "#f0fdf4" : over ? "#fef2f2" : inst.status === "claim_filed" ? "#eff6ff" : "#f9fafb";
+    var instBorder = inst.status === "received" ? "#86efac" : over ? "#fca5a5" : "#e5e7eb";
+    return /*#__PURE__*/React.createElement("div", {
+      key: inst.no,
+      style: {
+        background: instBg,
+        border: "1px solid ".concat(instBorder),
+        borderRadius: 8,
+        padding: "7px 5px",
+        textAlign: "center"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 16
+      }
+    }, icon), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        fontWeight: 700,
+        marginTop: 1
+      }
+    }, "#", inst.no), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 9,
+        color: "#6b7280"
+      }
+    }, fmt(inst.amount)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 8,
+        color: over ? "#dc2626" : "#6b7280",
+        marginTop: 1
+      }
+    }, inst.dueDate ? fmtDate(inst.dueDate) : "—"));
+  })), client.installments.map(function (inst, idx) {
+    return /*#__PURE__*/React.createElement(InstallmentCard, {
+      key: inst.no,
+      inst: inst,
+      onChange: function onChange(updated) {
+        return handleInstChange(idx, updated);
+      }
+    });
+  })), tab === "docs" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 700,
+      fontSize: 14
+    }
+  }, "Document Checklist"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280"
+    }
+  }, docSub, "/", client.docs.length, " received")), client.docs.map(function (doc, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        padding: "9px 0",
+        borderBottom: "1px solid #f3f4f6"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      onClick: function onClick() {
+        return handleDocChange(i, !doc.submitted);
+      },
+      style: {
+        width: 22,
+        height: 22,
+        borderRadius: 6,
+        flexShrink: 0,
+        cursor: "pointer",
+        border: doc.submitted ? "none" : "2px solid #d1d5db",
+        background: doc.submitted ? "#22c55e" : "transparent",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      }
+    }, doc.submitted && /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: "#fff",
+        fontSize: 14,
+        fontWeight: 700
+      }
+    }, "\u2713")), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13,
+        color: doc.submitted ? "#9ca3af" : "#1a1a1a",
+        textDecoration: doc.submitted ? "line-through" : "none",
+        flex: 1
+      }
+    }, doc.name));
+  })), tab === "fees" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: feesBal > 0 ? "#fffbeb" : "#f0fdf4",
+      border: "1px solid ".concat(feesBal > 0 ? "#fde68a" : "#86efac"),
+      borderRadius: 12,
+      padding: 14,
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 13,
+      marginBottom: 8,
+      color: feesBal > 0 ? "#92400e" : "#166534"
+    }
+  }, "\uD83D\uDCBC Total Fees Summary"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      gap: 10,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#6b7280"
+    }
+  }, "Total Due"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 700
+    }
+  }, fmt(instFeesDue))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#6b7280"
+    }
+  }, "Received"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 700,
+      color: "#16a34a"
+    }
+  }, fmt(instFeesRec))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#6b7280"
+    }
+  }, "Balance"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 700,
+      color: feesBal > 0 ? "#dc2626" : "#16a34a"
+    }
+  }, fmt(feesBal)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 6,
+      background: "#e5e7eb",
+      borderRadius: 4,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: "100%",
+      width: "".concat(instFeesDue > 0 ? Math.min(100, Math.round(instFeesRec / instFeesDue * 100)) : 0, "%"),
+      background: feesBal === 0 ? "#22c55e" : "#f59e0b",
+      borderRadius: 4
+    }
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 13,
+      marginBottom: 10
+    }
+  }, "Installment-wise Fees"), client.installments.map(function (inst, idx) {
+    var iDue = Number(inst.feesDue || 0);
+    var iRec = Number(inst.feesReceived || 0);
+    var iBal = iDue - iRec;
+    var iPct = iDue > 0 ? Math.min(100, Math.round(iRec / iDue * 100)) : 0;
+    var feesBalColor = iBal > 0 ? "#dc2626" : "#16a34a";
+    var feesStatusText = iDue === 0 ? "Not set" : iBal > 0 ? "".concat(fmt(iBal), " due") : "Paid ✅";
+    return /*#__PURE__*/React.createElement("div", {
+      key: inst.no,
+      style: {
+        background: "#fff",
+        border: "1px solid ".concat(iBal > 0 ? "#fde68a" : iDue > 0 ? "#86efac" : "#e5e7eb"),
+        borderRadius: 12,
+        padding: "12px 14px",
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 8,
+        alignItems: "center"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 28,
+        height: 28,
+        borderRadius: "50%",
+        background: "#d1d5db",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#fff",
+        fontWeight: 700,
+        fontSize: 12
+      }
+    }, inst.no), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontWeight: 700,
+        fontSize: 13
+      }
+    }, "Installment ", inst.no), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: "#6b7280"
+      }
+    }, fmtDate(inst.dueDate)))), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700,
+        color: iDue === 0 ? "#9ca3af" : feesBalColor
+      }
+    }, feesStatusText)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 8,
+        marginBottom: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+      style: {
+        fontSize: 11,
+        color: "#6b7280",
+        display: "block",
+        marginBottom: 3
+      }
+    }, "FEES DUE (\u20B9)"), /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      value: inst.feesDue || 0,
+      onChange: function onChange(e) {
+        var insts = client.installments.map(function (ii, i) {
+          return i === idx ? _objectSpread(_objectSpread({}, ii), {}, {
+            feesDue: Number(e.target.value)
+          }) : ii;
+        });
+        onUpdate(_objectSpread(_objectSpread({}, client), {}, {
+          installments: insts
+        }));
+      }
+    })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+      style: {
+        fontSize: 11,
+        color: "#6b7280",
+        display: "block",
+        marginBottom: 3
+      }
+    }, "FEES RECEIVED (\u20B9)"), /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      value: inst.feesReceived || 0,
+      onChange: function onChange(e) {
+        var insts = client.installments.map(function (ii, i) {
+          return i === idx ? _objectSpread(_objectSpread({}, ii), {}, {
+            feesReceived: Number(e.target.value)
+          }) : ii;
+        });
+        onUpdate(_objectSpread(_objectSpread({}, client), {}, {
+          installments: insts
+        }));
+      }
+    }))), iDue > 0 && /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: 4,
+        background: "#f3f4f6",
+        borderRadius: 4,
+        overflow: "hidden"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: "100%",
+        width: "".concat(iPct, "%"),
+        background: iPct === 100 ? "#22c55e" : "#f59e0b",
+        borderRadius: 4
+      }
+    })));
+  })), tab === "wa" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#f0fdf4",
+      border: "1px solid #86efac",
+      borderRadius: 10,
+      padding: 12,
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      marginBottom: 6,
+      fontWeight: 600
+    }
+  }, "MESSAGE PREVIEW"), /*#__PURE__*/React.createElement("pre", {
+    style: {
+      fontSize: 12,
+      margin: 0,
+      whiteSpace: "pre-wrap",
+      fontFamily: "inherit",
+      color: "#1a1a1a",
+      lineHeight: 1.6
+    }
+  }, buildMessage(settings.msgTemplate, client, settings))), !client.whatsapp && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fef2f2",
+      border: "1px solid #fca5a5",
+      borderRadius: 8,
+      padding: "8px 12px",
+      marginBottom: 10,
+      fontSize: 12,
+      color: "#991b1b"
+    }
+  }, "\u26A0\uFE0F No WhatsApp number \u2014 add in Info \u2192 Edit"), client.whatsapp && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return onSendWA([client]);
+    },
+    disabled: sending,
+    style: {
+      width: "100%",
+      fontSize: 14,
+      background: "#25D366",
+      color: "#fff",
+      border: "none",
+      borderRadius: 10,
+      padding: 12,
+      fontWeight: 700,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 8
+    }
+  }, "\uD83D\uDCF1 ", sending ? "Sending…" : settings.instanceId ? "Auto Send via API" : "Open WhatsApp")))));
+}
+
+// ── ADD CLIENT MODAL ──────────────────────────────────────────────────────────
+function AddClientModal(_ref23) {
+  var onClose = _ref23.onClose,
+    onAdd = _ref23.onAdd;
+  var _useState15 = useState({
+      name: "",
+      contact: "",
+      phone: "",
+      whatsapp: "",
+      schemeKey: "msmep2025",
+      district: "",
+      dic: "",
+      subsidyAmount: "",
+      productionDate: "",
+      notes: "",
+      feesDue: ""
+    }),
+    _useState16 = _slicedToArray(_useState15, 2),
+    form = _useState16[0],
+    setForm = _useState16[1];
+  var scheme = SCHEMES[form.schemeKey] || SCHEMES.msmep2025;
+  var handleSubmit = function handleSubmit() {
+    if (!form.name || !form.subsidyAmount || !form.productionDate) {
+      alert("Please fill: Name, Sanctioned Amount, and Production Date");
+      return;
+    }
+    var installments = buildInstallments(form.schemeKey, form.productionDate, form.subsidyAmount);
+    onAdd(_objectSpread(_objectSpread({}, form), {}, {
+      id: "c" + Date.now(),
+      subsidyAmount: Number(form.subsidyAmount) || 0,
+      installments: installments,
+      docs: DEFAULT_DOCS.map(function (d) {
+        return {
+          name: d,
+          submitted: false
+        };
+      }),
+      sanctionLetter: null,
+      docsReceivedDate: "",
+      docsSubmittedDate: "",
+      status: "pending"
+    }));
     onClose();
   };
-  return <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",display:"flex",alignItems:"flex-end",justifyContent:"center",zIndex:200}}>
-    <div style={{background:"#fff",borderRadius:"20px 20px 0 0",width:"100%",maxWidth:600,maxHeight:"92vh",overflowY:"auto",padding:"20px 16px"}}>
-      <div style={{width:40,height:4,background:"#ddd",borderRadius:4,margin:"0 auto 16px"}}/>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-        <p style={{fontWeight:700,fontSize:16,margin:0}}>Add New Client</p>
-        <button onClick={onClose} style={{background:"#f5f5f5",border:"none",borderRadius:20,width:32,height:32,fontSize:18,minWidth:"auto",padding:0}}>×</button>
-      </div>
-      {[["Client / Company Name *","name","text"],["Contact Person","contact","text"],["Phone","phone","tel"],["WhatsApp No. (e.g. 919876543210) *","whatsapp","text"],["Subsidy Scheme","scheme","text"],["Sanctioned Amount ₹ *","subsidyAmount","number"],["Date of Production *","productionDate","date"],["Submission Due Date *","dueDate","date"]].map(([label,key,type])=>(
-        <div key={key} style={{marginBottom:10}}>
-          <label style={{fontSize:12,color:"#666",display:"block",marginBottom:4}}>{label}</label>
-          <input type={type} value={form[key]} onChange={e=>setForm({...form,[key]:e.target.value})}/>
-        </div>
-      ))}
-      <div style={{marginBottom:10}}>
-        <label style={{fontSize:12,color:"#666",display:"block",marginBottom:4}}>Notes</label>
-        <textarea value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})} rows={2} style={{resize:"vertical"}}/>
-      </div>
-      <p style={{fontSize:11,color:"#999",marginBottom:12}}>WhatsApp format: 919876543210 (country code 91 + mobile number, no + or spaces)</p>
-      <button onClick={handleSubmit} style={{width:"100%",background:"#1a1a1a",color:"#fff",border:"none",borderRadius:10,padding:"12px",fontSize:14,fontWeight:600}}>Add Client</button>
-    </div>
-  </div>;
-}
-
-function SettingsPanel({settings,onSave}){
-  const [form,setForm]=useState({...settings});
-  return <div style={{padding:"0 4px"}}>
-    <div style={{background:"#e8f4fd",border:"1px solid #90cdf4",borderRadius:12,padding:"14px 16px",marginBottom:16}}>
-      <p style={{fontWeight:700,fontSize:14,color:"#1a365d",margin:"0 0 8px"}}>📱 Setup WhatsApp Auto-Send (Free)</p>
-      <ol style={{margin:0,paddingLeft:18,fontSize:13,color:"#2b6cb0",lineHeight:2.2}}>
-        <li>Go to <a href="https://app.ultramsg.com/register" target="_blank" rel="noreferrer" style={{color:"#2b6cb0"}}>app.ultramsg.com</a> → Register free account</li>
-        <li>Create Instance → Scan QR code with your WhatsApp</li>
-        <li>Copy Instance ID + Token → paste below</li>
-        <li>Save → Messages auto-send without any clicking! ✅</li>
-      </ol>
-      <p style={{fontSize:12,color:"#2b6cb0",margin:"8px 0 0"}}>💡 Free: 30 msgs/month. Paid plans from ~₹350/month</p>
-    </div>
-    {[["UltraMsg Instance ID","instanceId","text","e.g. instance12345"],["API Token","apiToken","password","Paste your token here"],["Your Office / Firm Name","officeName","text","Shown in messages"],["Office Phone Number","officePhone","tel","Clients call this number"]].map(([label,key,type,ph])=>(
-      <div key={key} style={{marginBottom:12}}>
-        <label style={{fontSize:12,color:"#666",display:"block",marginBottom:4}}>{label}</label>
-        <input type={type} value={form[key]} placeholder={ph} onChange={e=>setForm({...form,[key]:e.target.value})}/>
-      </div>
-    ))}
-    <div style={{marginBottom:12}}>
-      <label style={{fontSize:12,color:"#666",display:"block",marginBottom:4}}>Send reminder _ days before due date</label>
-      <div style={{display:"flex",alignItems:"center",gap:10}}>
-        <input type="number" min={1} max={30} value={form.reminderDaysBefore} onChange={e=>setForm({...form,reminderDaysBefore:Number(e.target.value)})} style={{width:70}}/>
-        <span style={{fontSize:13,color:"#555"}}>days before</span>
-      </div>
-    </div>
-    <div style={{marginBottom:16}}>
-      <label style={{fontSize:12,color:"#666",display:"block",marginBottom:4}}>Message Template</label>
-      <div style={{fontSize:11,color:"#999",marginBottom:6,lineHeight:1.6}}>Variables: {"{contact} {officeName} {scheme} {amount} {dueDate} {daysLeft} {pendingCount} {pendingDocs} {officePhone}"}</div>
-      <textarea value={form.msgTemplate} onChange={e=>setForm({...form,msgTemplate:e.target.value})} rows={10} style={{fontFamily:"monospace",fontSize:12,resize:"vertical"}}/>
-    </div>
-    <button onClick={()=>onSave(form)} style={{width:"100%",background:"#1a1a1a",color:"#fff",border:"none",borderRadius:10,padding:"12px",fontSize:14,fontWeight:600}}>Save Settings</button>
-  </div>;
-}
-
-function App(){
-  const [clients,setClients]=useState(()=>{try{const s=localStorage.getItem("sm-clients-v1");return s?JSON.parse(s):SAMPLE_CLIENTS;}catch{return SAMPLE_CLIENTS;}});
-  const [settings,setSettings]=useState(()=>{try{const s=localStorage.getItem("sm-settings");return s?JSON.parse(s):DEFAULT_SETTINGS;}catch{return DEFAULT_SETTINGS;}});
-  const [log,setLog]=useState(()=>{try{const s=localStorage.getItem("sm-log");return s?JSON.parse(s):[];}catch{return [];}});
-  const [search,setSearch]=useState("");
-  const [filter,setFilter]=useState("all");
-  const [tab,setTab]=useState("clients");
-  const [selected,setSelected]=useState(null);
-  const [adding,setAdding]=useState(false);
-  const [toast,setToast]=useState(null);
-  const [sending,setSending]=useState(false);
-
-  useEffect(()=>{try{localStorage.setItem("sm-clients-v1",JSON.stringify(clients));}catch{}},[clients]);
-  useEffect(()=>{try{localStorage.setItem("sm-settings",JSON.stringify(settings));}catch{}},[settings]);
-  useEffect(()=>{try{localStorage.setItem("sm-log",JSON.stringify(log.slice(-100)));}catch{}},[log]);
-
-  const showToast=(msg,type="info")=>setToast({msg,type});
-
-  const handleSendWA=useCallback(async(targets)=>{
-    setSending(true);
-    const time=new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
-    let ok=0;
-    for(const client of targets){
-      if(!client.whatsapp) continue;
-      const message=buildMessage(settings.msgTemplate,client,settings);
-      if(settings.instanceId&&settings.apiToken){
-        try{
-          await sendViaUltraMsg(settings.instanceId,settings.apiToken,client.whatsapp,message);
-          setLog(p=>[...p,{clientName:client.name,status:"sent",time}]);
-          ok++;
-        }catch(err){
-          setLog(p=>[...p,{clientName:client.name,status:"failed",error:err.message,time}]);
-          showToast(`Failed for ${client.name}: ${err.message}`,"error");
-        }
-      }else{
-        window.open(`https://wa.me/${client.whatsapp}?text=${encodeURIComponent(message)}`,"_blank");
-        setLog(p=>[...p,{clientName:client.name,status:"sent",time}]);
-        ok++;
-        await new Promise(r=>setTimeout(r,700));
-      }
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.5)",
+      display: "flex",
+      alignItems: "flex-end",
+      justifyContent: "center",
+      zIndex: 200
     }
-    setSending(false);
-    if(ok>0) showToast(settings.instanceId?`✅ Auto-sent ${ok} WhatsApp message${ok>1?"s":""}!`:`✅ Opened WhatsApp for ${ok} client${ok>1?"s":""}. Tap Send in each chat.`,"success");
-  },[settings]);
-
-  const dueClients=clients.filter(c=>c.status!=="submitted"&&daysUntil(c.dueDate)<=settings.reminderDaysBefore);
-  const updateClient=u=>{setClients(p=>p.map(c=>c.id===u.id?u:c));if(selected?.id===u.id)setSelected(u);};
-  const deleteClient=id=>{setClients(p=>p.filter(c=>c.id!==id));setSelected(null);};
-  const addClient=c=>setClients(p=>[c,...p]);
-  const visible=clients.filter(c=>(c.name.toLowerCase().includes(search.toLowerCase())||c.scheme.toLowerCase().includes(search.toLowerCase()))&&(filter==="all"||c.status===filter));
-  const totalSubsidy=clients.reduce((s,c)=>s+c.subsidyAmount,0);
-
-  return <div style={{maxWidth:600,margin:"0 auto",minHeight:"100vh",background:"#f5f5f0"}}>
-    {/* Header */}
-    <div style={{background:"#1a1a1a",color:"#fff",padding:"16px 16px 0"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
-        <div>
-          <p style={{fontWeight:700,fontSize:18,margin:"0 0 2px"}}>📊 Subsidy Manager</p>
-          <p style={{fontSize:12,color:"#aaa",margin:0}}>{clients.length} clients · {new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"long",year:"numeric"})}</p>
-        </div>
-        <button onClick={()=>setAdding(true)} style={{background:"#fff",color:"#1a1a1a",border:"none",borderRadius:10,padding:"8px 14px",fontWeight:600,fontSize:13,display:"flex",alignItems:"center",gap:6}}>+ Add Client</button>
-      </div>
-      <div style={{display:"flex",gap:0}}>
-        {[{key:"clients",label:"Clients"},{key:"notifications",label:`Notifications${dueClients.length>0?" ("+dueClients.length+")":`"}`}`},{key:"settings",label:"Settings"}].map(t=>(
-          <button key={t.key} onClick={()=>setTab(t.key)} style={{fontSize:13,border:"none",borderBottom:tab===t.key?"3px solid #fff":"3px solid transparent",borderRadius:0,background:"none",cursor:"pointer",padding:"8px 14px",color:tab===t.key?"#fff":"#888",fontWeight:tab===t.key?600:400}}>
-            {t.key==="clients"?"👥 Clients":t.key==="notifications"?`📱 Notif${dueClients.length>0?" ("+dueClients.length+")":""}`: "⚙️ Settings"}
-          </button>
-        ))}
-      </div>
-    </div>
-
-    {/* Body */}
-    <div style={{padding:"16px"}}>
-      {tab==="clients"&&<>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
-          <StatCard label="Total Subsidy" value={fmt(totalSubsidy)} color="#185FA5"/>
-          <StatCard label="Total Clients" value={clients.length} sub={`${clients.filter(c=>c.status==="submitted").length} submitted`} color="#0F6E56"/>
-          <StatCard label="Overdue" value={clients.filter(c=>c.status==="overdue").length} sub="Immediate action" color="#c0392b"/>
-          <StatCard label="WA Reminders Due" value={dueClients.length} sub="Need alert" color="#25D366"/>
-        </div>
-        <div style={{display:"flex",gap:8,marginBottom:14}}>
-          <input placeholder="Search clients…" value={search} onChange={e=>setSearch(e.target.value)} style={{flex:1}}/>
-          <select value={filter} onChange={e=>setFilter(e.target.value)} style={{width:110}}>
-            <option value="all">All</option><option value="pending">Pending</option><option value="overdue">Overdue</option><option value="submitted">Submitted</option>
-          </select>
-        </div>
-        {visible.length===0?<div style={{textAlign:"center",padding:"40px 20px",color:"#888"}}><div style={{fontSize:40,marginBottom:8}}>👥</div><p>No clients found</p></div>
-          :visible.map(c=><ClientCard key={c.id} client={c} onClick={()=>setSelected(c)} onQuickWA={c=>handleSendWA([c])}/>)
-        }
-      </>}
-
-      {tab==="notifications"&&<div>
-        {dueClients.length>0?<>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12,flexWrap:"wrap",gap:8}}>
-            <p style={{fontWeight:600,fontSize:15,margin:0}}>{dueClients.length} clients need reminders</p>
-            <button onClick={()=>handleSendWA(dueClients.filter(c=>c.whatsapp))} disabled={sending}
-              style={{fontSize:13,background:"#25D366",color:"#fff",border:"none",borderRadius:10,padding:"9px 14px",fontWeight:600,display:"flex",alignItems:"center",gap:6}}>
-              📱 {sending?"Sending…":`Send All (${dueClients.filter(c=>c.whatsapp).length})`}
-            </button>
-          </div>
-          {!settings.instanceId&&<div style={{background:"#FAEEDA",border:"1px solid #FAC775",borderRadius:10,padding:"10px 14px",marginBottom:12,fontSize:12,color:"#412402"}}>
-            ℹ️ No API configured. Button will open WhatsApp for each client. Go to Settings to setup auto-send.
-          </div>}
-          {dueClients.map(c=>{
-            const d=daysUntil(c.dueDate);
-            const pending=c.docs.filter(x=>!x.submitted).length;
-            return <div key={c.id} style={{background:"#fff",border:"1px solid #eee",borderRadius:14,padding:"12px 14px",marginBottom:10}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
-                <div style={{display:"flex",gap:10,alignItems:"center"}}>
-                  <Avatar name={c.name} size={34}/>
-                  <div>
-                    <p style={{fontWeight:600,fontSize:13,margin:0}}>{c.name}</p>
-                    <p style={{fontSize:11,color:"#666",margin:"2px 0 0"}}>{c.whatsapp?`+${c.whatsapp}`:"⚠️ No WhatsApp number"}</p>
-                  </div>
-                </div>
-                <div style={{textAlign:"right"}}>
-                  <div style={{fontSize:12,color:d<0?"#c0392b":"#e67e22",fontWeight:600}}>{d<0?`${Math.abs(d)}d overdue`:d===0?"Due today!":`${d}d left`}</div>
-                  <div style={{fontSize:11,color:"#888"}}>{pending} docs pending</div>
-                </div>
-              </div>
-              <div style={{display:"flex",gap:8}}>
-                <button onClick={()=>setSelected(c)} style={{flex:1,fontSize:12,borderRadius:8}}>View details</button>
-                {c.whatsapp&&<button onClick={()=>handleSendWA([c])} disabled={sending} style={{flex:1,fontSize:12,background:"#25D366",color:"#fff",border:"none",borderRadius:8,fontWeight:600,display:"flex",alignItems:"center",justifyContent:"center",gap:4}}>📱 Send</button>}
-              </div>
-            </div>;
-          })}
-        </>:<div style={{textAlign:"center",padding:"40px 20px",color:"#888"}}>
-          <div style={{fontSize:48,marginBottom:8}}>✅</div>
-          <p style={{fontWeight:600,margin:"0 0 4px"}}>All caught up!</p>
-          <p style={{fontSize:13,margin:0}}>No reminders due in next {settings.reminderDaysBefore} days.</p>
-        </div>}
-
-        {log.length>0&&<div style={{borderTop:"1px solid #eee",paddingTop:16,marginTop:16}}>
-          <div style={{display:"flex",justifyContent:"space-between",marginBottom:10}}>
-            <p style={{fontWeight:600,fontSize:14,margin:0}}>Notification Log</p>
-            <button onClick={()=>setLog([])} style={{fontSize:12}}>Clear</button>
-          </div>
-          {[...log].reverse().map((l,i)=><div key={i} style={{display:"flex",gap:10,padding:"8px 0",borderBottom:"1px solid #f5f5f5"}}>
-            <span style={{fontSize:16}}>{l.status==="sent"?"✅":"❌"}</span>
-            <div><div style={{fontSize:13,fontWeight:500}}>{l.clientName}</div><div style={{fontSize:11,color:"#888"}}>{l.status==="sent"?"Sent successfully":`Failed: ${l.error}`} · {l.time}</div></div>
-          </div>)}
-        </div>}
-      </div>}
-
-      {tab==="settings"&&<SettingsPanel settings={settings} onSave={s=>{setSettings(s);showToast("Settings saved! ✅","success");}}/>}
-    </div>
-
-    {selected&&<ClientDetail client={selected} onClose={()=>setSelected(null)} onUpdate={updateClient} onDelete={deleteClient} settings={settings} onSendWA={handleSendWA} sending={sending}/>}
-    {adding&&<AddClientModal onClose={()=>setAdding(false)} onAdd={addClient}/>}
-    {toast&&<Toast msg={toast.msg} type={toast.type} onClose={()=>setToast(null)}/>}
-  </div>;
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: "20px 20px 0 0",
+      width: "100%",
+      maxWidth: 600,
+      maxHeight: "93vh",
+      overflowY: "auto",
+      padding: "20px 16px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 40,
+      height: 4,
+      background: "#e5e7eb",
+      borderRadius: 4,
+      margin: "0 auto 16px"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 700,
+      fontSize: 16,
+      margin: 0
+    }
+  }, "Add New Client"), /*#__PURE__*/React.createElement("button", {
+    onClick: onClose,
+    style: {
+      background: "#f3f4f6",
+      border: "none",
+      borderRadius: 50,
+      width: 32,
+      height: 32,
+      minWidth: 32,
+      fontSize: 20,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 0
+    }
+  }, "\xD7")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 6,
+      fontWeight: 600
+    }
+  }, "SELECT SCHEME *"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 8
+    }
+  }, Object.keys(SCHEMES).map(function (k) {
+    var s = SCHEMES[k];
+    var sel = form.schemeKey === k;
+    return /*#__PURE__*/React.createElement("div", {
+      key: k,
+      onClick: function onClick() {
+        return setForm(_objectSpread(_objectSpread({}, form), {}, {
+          schemeKey: k
+        }));
+      },
+      style: {
+        border: "2px solid ".concat(sel ? s.color : "#e5e7eb"),
+        borderRadius: 10,
+        padding: "10px 14px",
+        cursor: "pointer",
+        background: sel ? s.bg : "#fff"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontWeight: 700,
+        fontSize: 13,
+        color: sel ? s.color : "#1a1a1a"
+      }
+    }, s.label), sel && /*#__PURE__*/React.createElement("span", null, "\u2713")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: sel ? s.color : "#6b7280",
+        marginTop: 2
+      }
+    }, s.description));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "District"), /*#__PURE__*/React.createElement("select", {
+    value: form.district || "",
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        district: e.target.value,
+        dic: getDIC(e.target.value)
+      }));
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: ""
+  }, "-- Select District --"), MP_DISTRICTS.map(function (d) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: d,
+      value: d
+    }, d);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "DIC (auto-filled)"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: form.dic || "",
+    placeholder: "Auto-filled",
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        dic: e.target.value
+      }));
+    }
+  })), [["Client / Company Name *", "name", "text"], ["Contact Person", "contact", "text"], ["Phone", "phone", "tel"], ["WhatsApp No. (e.g. 919876543210)", "whatsapp", "text"]].map(function (_ref24) {
+    var _ref25 = _slicedToArray(_ref24, 3),
+      label = _ref25[0],
+      key = _ref25[1],
+      type = _ref25[2];
+    return /*#__PURE__*/React.createElement("div", {
+      key: key,
+      style: {
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("label", {
+      style: {
+        fontSize: 12,
+        color: "#6b7280",
+        display: "block",
+        marginBottom: 3
+      }
+    }, label), /*#__PURE__*/React.createElement("input", {
+      type: type,
+      value: form[key] || "",
+      onChange: function onChange(e) {
+        return setForm(_objectSpread(_objectSpread({}, form), {}, _defineProperty({}, key, e.target.value)));
+      }
+    }));
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "Total Sanctioned Amount (\u20B9) *"), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    value: form.subsidyAmount || "",
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        subsidyAmount: e.target.value
+      }));
+    }
+  }), form.subsidyAmount && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      marginTop: 3
+    }
+  }, "Each of ", scheme.installmentCount, " installments \u2248 ", fmt(Number(form.subsidyAmount) / scheme.installmentCount))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "Date of Production * (auto-sets all due dates)"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    value: form.productionDate || "",
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        productionDate: e.target.value
+      }));
+    }
+  }), form.productionDate && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: scheme.bg,
+      border: "1px solid ".concat(scheme.color, "40"),
+      borderRadius: 8,
+      padding: "8px 10px",
+      marginTop: 6,
+      fontSize: 12,
+      color: scheme.color,
+      lineHeight: 2
+    }
+  }, Array.from({
+    length: scheme.installmentCount
+  }, function (_, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: i
+    }, i === 0 ? "✅" : "📋", " Inst.", i + 1, ": ", fmtDate(addYears(form.productionDate, i)), " \u2014 ", scheme.claimRequired(i + 1) ? "Claim required" : "Auto release");
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "CA Fees Due (\u20B9)"), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    value: form.feesDue || "",
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        feesDue: e.target.value
+      }));
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "Notes"), /*#__PURE__*/React.createElement("textarea", {
+    rows: 2,
+    value: form.notes || "",
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        notes: e.target.value
+      }));
+    },
+    style: {
+      resize: "vertical"
+    }
+  })), /*#__PURE__*/React.createElement("button", {
+    onClick: handleSubmit,
+    style: {
+      width: "100%",
+      background: "#1a1a1a",
+      color: "#fff",
+      border: "none",
+      borderRadius: 10,
+      padding: 13,
+      fontSize: 14,
+      fontWeight: 700
+    }
+  }, "Add Client")));
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+// ── SETTINGS PANEL ────────────────────────────────────────────────────────────
+function SettingsPanel(_ref26) {
+  var settings = _ref26.settings,
+    onSave = _ref26.onSave;
+  var _useState17 = useState(_objectSpread({}, settings)),
+    _useState18 = _slicedToArray(_useState17, 2),
+    form = _useState18[0],
+    setForm = _useState18[1];
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#dbeafe",
+      border: "1px solid #93c5fd",
+      borderRadius: 12,
+      padding: 14,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 700,
+      fontSize: 14,
+      color: "#1e3a8a",
+      margin: "0 0 8px"
+    }
+  }, "\uD83D\uDCF1 WhatsApp Auto-Send Setup"), /*#__PURE__*/React.createElement("ol", {
+    style: {
+      margin: 0,
+      paddingLeft: 18,
+      fontSize: 13,
+      color: "#1e40af",
+      lineHeight: 2.2
+    }
+  }, /*#__PURE__*/React.createElement("li", null, "Go to ", /*#__PURE__*/React.createElement("a", {
+    href: "https://app.ultramsg.com/register",
+    target: "_blank",
+    rel: "noreferrer",
+    style: {
+      color: "#1d4ed8"
+    }
+  }, "app.ultramsg.com"), " \u2192 Register free"), /*#__PURE__*/React.createElement("li", null, "Create Instance \u2192 Scan QR with your WhatsApp"), /*#__PURE__*/React.createElement("li", null, "Paste Instance ID + Token below \u2192 Save \u2705")), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 12,
+      color: "#1e40af",
+      margin: "6px 0 0"
+    }
+  }, "\uD83D\uDCA1 Free: 30 msgs/month \xB7 Paid from ~\u20B9350/month")), [["UltraMsg Instance ID", "instanceId", "text", "e.g. instance12345"], ["API Token", "apiToken", "password", "Your token"], ["Office / Firm Name", "officeName", "text", "Shown in messages"], ["Office Phone", "officePhone", "tel", "For client callbacks"]].map(function (_ref27) {
+    var _ref28 = _slicedToArray(_ref27, 4),
+      label = _ref28[0],
+      key = _ref28[1],
+      type = _ref28[2],
+      ph = _ref28[3];
+    return /*#__PURE__*/React.createElement("div", {
+      key: key,
+      style: {
+        marginBottom: 12
+      }
+    }, /*#__PURE__*/React.createElement("label", {
+      style: {
+        fontSize: 12,
+        color: "#6b7280",
+        display: "block",
+        marginBottom: 3
+      }
+    }, label), /*#__PURE__*/React.createElement("input", {
+      type: type,
+      value: form[key] || "",
+      placeholder: ph,
+      onChange: function onChange(e) {
+        return setForm(_objectSpread(_objectSpread({}, form), {}, _defineProperty({}, key, e.target.value)));
+      }
+    }));
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "Send reminder _ days before installment due"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    min: 1,
+    max: 90,
+    value: form.reminderDaysBefore,
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        reminderDaysBefore: Number(e.target.value)
+      }));
+    },
+    style: {
+      width: 70
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      color: "#6b7280"
+    }
+  }, "days before"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      display: "block",
+      marginBottom: 3
+    }
+  }, "Message Template"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#9ca3af",
+      marginBottom: 5
+    }
+  }, "Variables: ", "{contact} {officeName} {scheme} {district} {amount} {dueDate} {daysLeft} {pendingCount} {pendingDocs} {officePhone}"), /*#__PURE__*/React.createElement("textarea", {
+    rows: 10,
+    value: form.msgTemplate,
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        msgTemplate: e.target.value
+      }));
+    },
+    style: {
+      fontFamily: "monospace",
+      fontSize: 12,
+      resize: "vertical"
+    }
+  })), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return onSave(form);
+    },
+    style: {
+      width: "100%",
+      background: "#1a1a1a",
+      color: "#fff",
+      border: "none",
+      borderRadius: 10,
+      padding: 12,
+      fontSize: 14,
+      fontWeight: 700
+    }
+  }, "Save Settings"));
+}
+
+// ── REPORTS TAB ───────────────────────────────────────────────────────────────
+function downloadCSV(filename, rows, headers) {
+  var csv = [headers.join(",")].concat(rows.map(function (r) {
+    return r.map(function (v) {
+      var s = String(v || "").replace(/"/g, '""');
+      return s.includes(",") || s.includes("\n") ? "\"".concat(s, "\"") : s;
+    }).join(",");
+  })).join("\n");
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {
+    type: "text/csv"
+  }));
+  a.download = filename;
+  a.click();
+}
+function ReportsTab(_ref29) {
+  var clients = _ref29.clients;
+  var overdue = [],
+    upcoming = [];
+  clients.forEach(function (c) {
+    c.installments.forEach(function (i) {
+      if (i.status === "received") return;
+      var d = i.dueDate ? daysUntil(i.dueDate) : null;
+      var s = SCHEMES[c.schemeKey] || SCHEMES.msmep2025;
+      if (d !== null && d < 0) overdue.push({
+        client: c,
+        inst: i,
+        d: d,
+        scheme: s
+      });else if (d !== null && d <= 60) upcoming.push({
+        client: c,
+        inst: i,
+        d: d,
+        scheme: s
+      });
+    });
+  });
+  overdue.sort(function (a, b) {
+    return a.d - b.d;
+  });
+  upcoming.sort(function (a, b) {
+    return a.d - b.d;
+  });
+  var dlInstallments = function dlInstallments() {
+    var headers = ["Client", "Scheme", "District", "DIC", "Inst.", "Due Date", "Amount(Rs)", "Status", "Days", "Claim Required"];
+    var rows = [];
+    clients.forEach(function (c) {
+      var s = SCHEMES[c.schemeKey] || SCHEMES.msmep2025;
+      c.installments.forEach(function (i) {
+        var d = i.dueDate ? daysUntil(i.dueDate) : null;
+        rows.push([c.name, s.label, c.district || "", c.dic || "", "Inst." + i.no, fmtDate(i.dueDate), i.amount, i.status, d === null ? "N/A" : d < 0 ? "Overdue " + Math.abs(d) + "d" : d + "d left", i.claimRequired ? "Yes" : "No (Auto)"]);
+      });
+    });
+    downloadCSV("Installment_Report.csv", rows, headers);
+  };
+  var dlFees = function dlFees() {
+    var headers = ["Client", "Scheme", "District", "DIC", "Inst.", "Due Date", "Fees Due(Rs)", "Fees Received(Rs)", "Balance(Rs)", "Status"];
+    var rows = [];
+    clients.forEach(function (c) {
+      var s = SCHEMES[c.schemeKey] || SCHEMES.msmep2025;
+      c.installments.forEach(function (i) {
+        var d = Number(i.feesDue || 0),
+          r = Number(i.feesReceived || 0),
+          b = d - r;
+        rows.push([c.name, s.label, c.district || "", c.dic || "", "Inst." + i.no, fmtDate(i.dueDate), d, r, b, b === 0 && d > 0 ? "Paid" : d === 0 ? "Not Set" : "Pending"]);
+      });
+    });
+    downloadCSV("Fees_Report.csv", rows, headers);
+  };
+  var dlSubsidy = function dlSubsidy() {
+    var headers = ["Client", "Scheme", "District", "DIC", "Sanctioned(Rs)", "Received(Rs)", "Balance(Rs)", "Insts Received"];
+    var rows = clients.map(function (c) {
+      var s = SCHEMES[c.schemeKey] || SCHEMES.msmep2025;
+      var rec = c.installments.filter(function (i) {
+        return i.status === "received";
+      });
+      var tr = rec.reduce(function (ss, i) {
+        return ss + Number(i.amount);
+      }, 0);
+      return [c.name, s.label, c.district || "", c.dic || "", c.subsidyAmount || 0, tr, Number(c.subsidyAmount || 0) - tr, rec.length + "/" + c.installments.length];
+    });
+    downloadCSV("Subsidy_Report.csv", rows, headers);
+  };
+  var dlFull = function dlFull() {
+    var headers = ["Client", "Contact", "Phone", "WhatsApp", "Scheme", "District", "DIC", "Sanctioned(Rs)", "Production Date", "Status", "Subsidy Received(Rs)", "Fees Due(Rs)", "Fees Received(Rs)", "Fees Balance(Rs)", "Sanction Letter"];
+    var rows = clients.map(function (c) {
+      var s = SCHEMES[c.schemeKey] || SCHEMES.msmep2025;
+      var tr = c.installments.filter(function (i) {
+        return i.status === "received";
+      }).reduce(function (ss, i) {
+        return ss + Number(i.amount);
+      }, 0);
+      var fd = c.installments.reduce(function (ss, i) {
+        return ss + Number(i.feesDue || 0);
+      }, 0);
+      var fr = c.installments.reduce(function (ss, i) {
+        return ss + Number(i.feesReceived || 0);
+      }, 0);
+      return [c.name, c.contact || "", c.phone || "", c.whatsapp || "", s.label, c.district || "", c.dic || "", c.subsidyAmount || 0, fmtDate(c.productionDate), effectiveStatus(c), tr, fd, fr, fd - fr, c.sanctionLetter ? "Uploaded" : "Not uploaded"];
+    });
+    downloadCSV("Full_Report.csv", rows, headers);
+  };
+  var cards = [{
+    title: "📋 Pending Claims",
+    desc: "Installments needing claim filing",
+    color: "#1d4ed8",
+    bg: "#eff6ff",
+    fn: dlInstallments
+  }, {
+    title: "💵 Subsidy Received",
+    desc: "Disbursement status per client",
+    color: "#15803d",
+    bg: "#f0fdf4",
+    fn: dlSubsidy
+  }, {
+    title: "💼 Fees Installment-wise",
+    desc: "Fees due, received & balance per installment",
+    color: "#b45309",
+    bg: "#fffbeb",
+    fn: dlFees
+  }, {
+    title: "📁 Full Client Report",
+    desc: "All data — all clients — all fields",
+    color: "#7c3aed",
+    bg: "#faf5ff",
+    fn: dlFull
+  }];
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 700,
+      fontSize: 15,
+      marginBottom: 4
+    }
+  }, "Reports"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 12,
+      color: "#6b7280",
+      marginBottom: 16
+    }
+  }, "Download as CSV \u2014 open in Excel or Google Sheets"), overdue.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fef2f2",
+      border: "1px solid #fca5a5",
+      borderRadius: 12,
+      padding: "12px 14px",
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 13,
+      color: "#991b1b",
+      marginBottom: 8
+    }
+  }, "\u26A0\uFE0F ", overdue.length, " Overdue Installments"), overdue.slice(0, 4).map(function (x, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "4px 0",
+        borderTop: "1px solid #fecaca",
+        fontSize: 12
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: "#7f1d1d",
+        fontWeight: 500
+      }
+    }, x.client.name, " \u2014 Inst.", x.inst.no), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: "#dc2626",
+        fontWeight: 700
+      }
+    }, Math.abs(x.d), "d overdue"));
+  })), upcoming.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fffbeb",
+      border: "1px solid #fde68a",
+      borderRadius: 12,
+      padding: "12px 14px",
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      fontSize: 13,
+      color: "#92400e",
+      marginBottom: 8
+    }
+  }, "\uD83D\uDCC5 Upcoming in 60 Days (", upcoming.length, ")"), upcoming.slice(0, 4).map(function (x, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "4px 0",
+        borderTop: "1px solid #fde68a",
+        fontSize: 12
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: "#78350f"
+      }
+    }, x.client.name, " \u2014 Inst.", x.inst.no, " ", x.inst.claimRequired ? "(Claim)" : "(Auto)"), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: "#b45309",
+        fontWeight: 700
+      }
+    }, x.d === 0 ? "Today" : x.d + "d"));
+  })), cards.map(function (r, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        background: r.bg,
+        border: "1px solid ".concat(r.color, "30"),
+        borderRadius: 12,
+        padding: "14px 16px",
+        marginBottom: 10,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontWeight: 700,
+        fontSize: 13,
+        color: r.color
+      }
+    }, r.title), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: "#6b7280",
+        marginTop: 2
+      }
+    }, r.desc)), /*#__PURE__*/React.createElement("button", {
+      onClick: r.fn,
+      style: {
+        background: r.color,
+        color: "#fff",
+        border: "none",
+        borderRadius: 10,
+        padding: "9px 14px",
+        fontSize: 12,
+        fontWeight: 700,
+        whiteSpace: "nowrap",
+        flexShrink: 0
+      }
+    }, "\u2B07\uFE0F Download"));
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#f9fafb",
+      border: "1px solid #e5e7eb",
+      borderRadius: 10,
+      padding: "10px 14px",
+      marginTop: 4,
+      fontSize: 12,
+      color: "#6b7280"
+    }
+  }, "\uD83D\uDCA1 CSV files open in Microsoft Excel or Google Sheets."));
+}
+
+// ── MAIN APP ──────────────────────────────────────────────────────────────────
+function App() {
+  var _useState19 = useState([]),
+    _useState20 = _slicedToArray(_useState19, 2),
+    clients = _useState20[0],
+    setClients = _useState20[1];
+  var _useState21 = useState(DEFAULT_SETTINGS),
+    _useState22 = _slicedToArray(_useState21, 2),
+    settings = _useState22[0],
+    setSettings = _useState22[1];
+  var _useState23 = useState([]),
+    _useState24 = _slicedToArray(_useState23, 2),
+    log = _useState24[0],
+    setLog = _useState24[1];
+  var _useState25 = useState(true),
+    _useState26 = _slicedToArray(_useState25, 2),
+    loading = _useState26[0],
+    setLoading = _useState26[1];
+  var _useState27 = useState(null),
+    _useState28 = _slicedToArray(_useState27, 2),
+    dbError = _useState28[0],
+    setDbError = _useState28[1];
+  var _useState29 = useState(""),
+    _useState30 = _slicedToArray(_useState29, 2),
+    search = _useState30[0],
+    setSearch = _useState30[1];
+  var _useState31 = useState("all"),
+    _useState32 = _slicedToArray(_useState31, 2),
+    schemeFilter = _useState32[0],
+    setSchemeFilter = _useState32[1];
+  var _useState33 = useState("all"),
+    _useState34 = _slicedToArray(_useState33, 2),
+    statusFilter = _useState34[0],
+    setStatusFilter = _useState34[1];
+  var _useState35 = useState("all"),
+    _useState36 = _slicedToArray(_useState35, 2),
+    distFilter = _useState36[0],
+    setDistFilter = _useState36[1];
+  var _useState37 = useState("clients"),
+    _useState38 = _slicedToArray(_useState37, 2),
+    tab = _useState38[0],
+    setTab = _useState38[1];
+  var _useState39 = useState(null),
+    _useState40 = _slicedToArray(_useState39, 2),
+    selectedId = _useState40[0],
+    setSelectedId = _useState40[1];
+  var _useState41 = useState(false),
+    _useState42 = _slicedToArray(_useState41, 2),
+    adding = _useState42[0],
+    setAdding = _useState42[1];
+  var _useState43 = useState(null),
+    _useState44 = _slicedToArray(_useState43, 2),
+    toast = _useState44[0],
+    setToast = _useState44[1];
+  var _useState45 = useState(false),
+    _useState46 = _slicedToArray(_useState45, 2),
+    sending = _useState46[0],
+    setSending = _useState46[1];
+  useEffect(function () {
+    var unsub = db.collection("clients").onSnapshot(function (snap) {
+      var data = snap.docs.map(function (doc) {
+        return _objectSpread(_objectSpread({}, doc.data()), {}, {
+          id: doc.id
+        });
+      });
+      data.sort(function (a, b) {
+        return (a.name || "").localeCompare(b.name || "");
+      });
+      setClients(data);
+      setLoading(false);
+    }, function (err) {
+      setDbError("Database error: " + err.message);
+      setLoading(false);
+    });
+    return unsub;
+  }, []);
+  useEffect(function () {
+    db.collection("config").doc("settings").get().then(function (doc) {
+      if (doc.exists) setSettings(_objectSpread(_objectSpread({}, DEFAULT_SETTINGS), doc.data()));
+    })["catch"](function () {});
+  }, []);
+  useEffect(function () {
+    var unsub = db.collection("notificationLog").orderBy("ts", "desc").limit(50).onSnapshot(function (snap) {
+      return setLog(snap.docs.map(function (d) {
+        return d.data();
+      }));
+    }, function () {});
+    return unsub;
+  }, []);
+  var showToast = function showToast(msg, type) {
+    return setToast({
+      msg: msg,
+      type: type || "info"
+    });
+  };
+  var updateClient = /*#__PURE__*/function () {
+    var _ref30 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(updated) {
+      var _t3;
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.p = _context5.n) {
+          case 0:
+            _context5.p = 0;
+            _context5.n = 1;
+            return db.collection("clients").doc(updated.id).set(updated);
+          case 1:
+            _context5.n = 3;
+            break;
+          case 2:
+            _context5.p = 2;
+            _t3 = _context5.v;
+            showToast("Save failed: " + _t3.message, "error");
+          case 3:
+            return _context5.a(2);
+        }
+      }, _callee5, null, [[0, 2]]);
+    }));
+    return function updateClient(_x6) {
+      return _ref30.apply(this, arguments);
+    };
+  }();
+  var deleteClient = /*#__PURE__*/function () {
+    var _ref31 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(id) {
+      var _t4;
+      return _regenerator().w(function (_context6) {
+        while (1) switch (_context6.p = _context6.n) {
+          case 0:
+            _context6.p = 0;
+            _context6.n = 1;
+            return db.collection("clients").doc(id)["delete"]();
+          case 1:
+            setSelectedId(null);
+            _context6.n = 3;
+            break;
+          case 2:
+            _context6.p = 2;
+            _t4 = _context6.v;
+            showToast("Delete failed: " + _t4.message, "error");
+          case 3:
+            return _context6.a(2);
+        }
+      }, _callee6, null, [[0, 2]]);
+    }));
+    return function deleteClient(_x7) {
+      return _ref31.apply(this, arguments);
+    };
+  }();
+  var addClient = /*#__PURE__*/function () {
+    var _ref32 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7(client) {
+      var _t5;
+      return _regenerator().w(function (_context7) {
+        while (1) switch (_context7.p = _context7.n) {
+          case 0:
+            _context7.p = 0;
+            _context7.n = 1;
+            return db.collection("clients").doc(client.id).set(client);
+          case 1:
+            _context7.n = 3;
+            break;
+          case 2:
+            _context7.p = 2;
+            _t5 = _context7.v;
+            showToast("Add failed: " + _t5.message, "error");
+          case 3:
+            return _context7.a(2);
+        }
+      }, _callee7, null, [[0, 2]]);
+    }));
+    return function addClient(_x8) {
+      return _ref32.apply(this, arguments);
+    };
+  }();
+  var saveSettings = /*#__PURE__*/function () {
+    var _ref33 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee8(s) {
+      var _t6;
+      return _regenerator().w(function (_context8) {
+        while (1) switch (_context8.p = _context8.n) {
+          case 0:
+            setSettings(s);
+            _context8.p = 1;
+            _context8.n = 2;
+            return db.collection("config").doc("settings").set(s);
+          case 2:
+            _context8.n = 4;
+            break;
+          case 3:
+            _context8.p = 3;
+            _t6 = _context8.v;
+            showToast("Settings save failed", "error");
+            return _context8.a(2);
+          case 4:
+            showToast("Settings saved ✅", "success");
+          case 5:
+            return _context8.a(2);
+        }
+      }, _callee8, null, [[1, 3]]);
+    }));
+    return function saveSettings(_x9) {
+      return _ref33.apply(this, arguments);
+    };
+  }();
+  var clearLog = /*#__PURE__*/function () {
+    var _ref34 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee9() {
+      var snap, batch;
+      return _regenerator().w(function (_context9) {
+        while (1) switch (_context9.n) {
+          case 0:
+            _context9.n = 1;
+            return db.collection("notificationLog").get();
+          case 1:
+            snap = _context9.v;
+            batch = db.batch();
+            snap.docs.forEach(function (d) {
+              return batch["delete"](d.ref);
+            });
+            _context9.n = 2;
+            return batch.commit();
+          case 2:
+            return _context9.a(2);
+        }
+      }, _callee9);
+    }));
+    return function clearLog() {
+      return _ref34.apply(this, arguments);
+    };
+  }();
+  var handleSendWA = useCallback(/*#__PURE__*/function () {
+    var _ref35 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee0(targets) {
+      var time, ok, _iterator, _step, client, message, _t7, _t8;
+      return _regenerator().w(function (_context0) {
+        while (1) switch (_context0.p = _context0.n) {
+          case 0:
+            setSending(true);
+            time = new Date().toLocaleTimeString("en-IN", {
+              hour: "2-digit",
+              minute: "2-digit"
+            });
+            ok = 0;
+            _iterator = _createForOfIteratorHelper(targets);
+            _context0.p = 1;
+            _iterator.s();
+          case 2:
+            if ((_step = _iterator.n()).done) {
+              _context0.n = 10;
+              break;
+            }
+            client = _step.value;
+            if (client.whatsapp) {
+              _context0.n = 3;
+              break;
+            }
+            return _context0.a(3, 9);
+          case 3:
+            message = buildMessage(settings.msgTemplate, client, settings);
+            if (!(settings.instanceId && settings.apiToken)) {
+              _context0.n = 8;
+              break;
+            }
+            _context0.p = 4;
+            _context0.n = 5;
+            return sendViaUltraMsg(settings.instanceId, settings.apiToken, client.whatsapp, message);
+          case 5:
+            db.collection("notificationLog").add({
+              clientName: client.name,
+              status: "sent",
+              time: time,
+              ts: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            ok++;
+            _context0.n = 7;
+            break;
+          case 6:
+            _context0.p = 6;
+            _t7 = _context0.v;
+            db.collection("notificationLog").add({
+              clientName: client.name,
+              status: "failed",
+              error: _t7.message,
+              time: time,
+              ts: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            showToast("Failed for ".concat(client.name, ": ").concat(_t7.message), "error");
+          case 7:
+            _context0.n = 9;
+            break;
+          case 8:
+            window.open("https://wa.me/".concat(client.whatsapp.replace(/\D/g, ""), "?text=").concat(encodeURIComponent(message)), "_blank");
+            db.collection("notificationLog").add({
+              clientName: client.name,
+              status: "sent",
+              time: time,
+              ts: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            ok++;
+            _context0.n = 9;
+            return new Promise(function (r) {
+              return setTimeout(r, 700);
+            });
+          case 9:
+            _context0.n = 2;
+            break;
+          case 10:
+            _context0.n = 12;
+            break;
+          case 11:
+            _context0.p = 11;
+            _t8 = _context0.v;
+            _iterator.e(_t8);
+          case 12:
+            _context0.p = 12;
+            _iterator.f();
+            return _context0.f(12);
+          case 13:
+            setSending(false);
+            if (ok > 0) showToast(settings.instanceId ? "\u2705 Sent ".concat(ok, " messages!") : "\u2705 Opened WhatsApp for ".concat(ok, " client").concat(ok > 1 ? "s" : "", "."), "success");
+          case 14:
+            return _context0.a(2);
+        }
+      }, _callee0, null, [[4, 6], [1, 11, 12, 13]]);
+    }));
+    return function (_x0) {
+      return _ref35.apply(this, arguments);
+    };
+  }(), [settings]);
+  var dueClients = clients.filter(function (c) {
+    if (effectiveStatus(c) === "submitted") return false;
+    return c.installments && c.installments.some(function (i) {
+      return i.status !== "received" && i.dueDate && daysUntil(i.dueDate) <= settings.reminderDaysBefore;
+    });
+  });
+  var visible = clients.filter(function (c) {
+    var st = effectiveStatus(c);
+    var s = SCHEMES[c.schemeKey] || SCHEMES.msmep2025;
+    var ms = c.name.toLowerCase().includes(search.toLowerCase()) || s.label.toLowerCase().includes(search.toLowerCase()) || (c.district || "").toLowerCase().includes(search.toLowerCase());
+    return ms && (schemeFilter === "all" || c.schemeKey === schemeFilter) && (statusFilter === "all" || st === statusFilter) && (distFilter === "all" || c.district === distFilter);
+  });
+  var totalSanctioned = clients.reduce(function (s, c) {
+    return s + Number(c.subsidyAmount || 0);
+  }, 0);
+  var totalReceived = clients.reduce(function (s, c) {
+    return s + c.installments.filter(function (i) {
+      return i.status === "received";
+    }).reduce(function (ss, i) {
+      return ss + Number(i.amount);
+    }, 0);
+  }, 0);
+  var totalFeesDue = clients.reduce(function (s, c) {
+    return s + c.installments.reduce(function (ss, i) {
+      return ss + Number(i.feesDue || 0);
+    }, 0);
+  }, 0);
+  var totalFeesRec = clients.reduce(function (s, c) {
+    return s + c.installments.reduce(function (ss, i) {
+      return ss + Number(i.feesReceived || 0);
+    }, 0);
+  }, 0);
+  var usedDistricts = _toConsumableArray(new Set(clients.map(function (c) {
+    return c.district;
+  }).filter(Boolean))).sort();
+  var selectedClient = selectedId ? clients.find(function (c) {
+    return c.id === selectedId;
+  }) || null : null;
+  if (loading) return /*#__PURE__*/React.createElement(LoadingScreen, null);
+  if (dbError) return /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      minHeight: "100vh",
+      padding: 24,
+      textAlign: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 40,
+      marginBottom: 16
+    }
+  }, "\u26A0\uFE0F"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 700,
+      fontSize: 16,
+      marginBottom: 8
+    }
+  }, "Database Connection Error"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13,
+      color: "#6b7280",
+      marginBottom: 16
+    }
+  }, dbError), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 12,
+      color: "#9ca3af"
+    }
+  }, "Please check Firestore is enabled in your Firebase console."));
+  var NAV = [{
+    k: "clients",
+    l: "👥 Clients"
+  }, {
+    k: "notifications",
+    l: "\uD83D\uDCF1 Due".concat(dueClients.length > 0 ? " (".concat(dueClients.length, ")") : "")
+  }, {
+    k: "fees",
+    l: "💼 Fees"
+  }, {
+    k: "reports",
+    l: "📊 Reports"
+  }, {
+    k: "settings",
+    l: "⚙️"
+  }];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 600,
+      margin: "0 auto",
+      minHeight: "100vh",
+      background: "#f0f0ec"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#1a1a1a",
+      color: "#fff",
+      padding: "16px 16px 0",
+      position: "sticky",
+      top: 0,
+      zIndex: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 700,
+      fontSize: 18,
+      margin: "0 0 2px"
+    }
+  }, "\uD83D\uDCCA Subsidy Manager"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 11,
+      color: "#9ca3af",
+      margin: 0
+    }
+  }, clients.length, " clients \xB7 MP \xB7 ", new Date().toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  }))), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setAdding(true);
+    },
+    style: {
+      background: "#fff",
+      color: "#1a1a1a",
+      border: "none",
+      borderRadius: 10,
+      padding: "8px 14px",
+      fontWeight: 700,
+      fontSize: 13
+    }
+  }, "+ Add")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      overflowX: "auto"
+    }
+  }, NAV.map(function (t) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: t.k,
+      onClick: function onClick() {
+        return setTab(t.k);
+      },
+      style: {
+        fontSize: 12,
+        border: "none",
+        borderBottom: tab === t.k ? "3px solid #fff" : "3px solid transparent",
+        borderRadius: 0,
+        background: "none",
+        padding: "8px 12px",
+        color: tab === t.k ? "#fff" : "#9ca3af",
+        fontWeight: tab === t.k ? 700 : 400,
+        whiteSpace: "nowrap",
+        cursor: "pointer"
+      }
+    }, t.l);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 16
+    }
+  }, tab === "clients" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 10,
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: 12,
+      padding: "12px 14px",
+      border: "1px solid #e5e7eb"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      marginBottom: 3
+    }
+  }, "Total Sanctioned"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 700,
+      color: "#1d4ed8"
+    }
+  }, fmt(totalSanctioned)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#059669"
+    }
+  }, "Received: ", fmt(totalReceived))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: 12,
+      padding: "12px 14px",
+      border: "1px solid #e5e7eb"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      marginBottom: 3
+    }
+  }, "Clients"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 16,
+      fontWeight: 700,
+      color: "#059669"
+    }
+  }, clients.length), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#6b7280"
+    }
+  }, clients.filter(function (c) {
+    return effectiveStatus(c) === "submitted";
+  }).length, " closed \xB7 ", clients.filter(function (c) {
+    return effectiveStatus(c) === "overdue";
+  }).length, " overdue"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      marginBottom: 12,
+      flexWrap: "wrap"
+    }
+  }, Object.keys(SCHEMES).map(function (k) {
+    var cnt = clients.filter(function (c) {
+      return c.schemeKey === k;
+    }).length;
+    var s = SCHEMES[k];
+    return /*#__PURE__*/React.createElement("div", {
+      key: k,
+      style: {
+        background: s.bg,
+        border: "1px solid ".concat(s.color, "40"),
+        borderRadius: 8,
+        padding: "4px 10px",
+        fontSize: 11,
+        color: s.color,
+        fontWeight: 600
+      }
+    }, s.label, ": ", cnt);
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 8,
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    placeholder: "Search clients\u2026",
+    value: search,
+    onChange: function onChange(e) {
+      return setSearch(e.target.value);
+    },
+    style: {
+      gridColumn: "1/-1"
+    }
+  }), /*#__PURE__*/React.createElement("select", {
+    value: schemeFilter,
+    onChange: function onChange(e) {
+      return setSchemeFilter(e.target.value);
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "all"
+  }, "All Schemes"), Object.keys(SCHEMES).map(function (k) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: k,
+      value: k
+    }, SCHEMES[k].label);
+  })), /*#__PURE__*/React.createElement("select", {
+    value: statusFilter,
+    onChange: function onChange(e) {
+      return setStatusFilter(e.target.value);
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "all"
+  }, "All Status"), /*#__PURE__*/React.createElement("option", {
+    value: "pending"
+  }, "Pending"), /*#__PURE__*/React.createElement("option", {
+    value: "overdue"
+  }, "Overdue"), /*#__PURE__*/React.createElement("option", {
+    value: "submitted"
+  }, "Closed")), usedDistricts.length > 0 && /*#__PURE__*/React.createElement("select", {
+    value: distFilter,
+    onChange: function onChange(e) {
+      return setDistFilter(e.target.value);
+    },
+    style: {
+      gridColumn: "1/-1"
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "all"
+  }, "All Districts"), usedDistricts.map(function (d) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: d,
+      value: d
+    }, d);
+  }))), visible.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: 40,
+      color: "#6b7280"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 40,
+      marginBottom: 8
+    }
+  }, "\uD83D\uDC65"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 600,
+      marginBottom: 4
+    }
+  }, "No clients yet"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13
+    }
+  }, "Tap + Add to add your first client")) : visible.map(function (c) {
+    return /*#__PURE__*/React.createElement(ClientCard, {
+      key: c.id,
+      client: c,
+      onClick: function onClick() {
+        return setSelectedId(c.id);
+      },
+      onQuickWA: function onQuickWA(c) {
+        return handleSendWA([c]);
+      }
+    });
+  })), tab === "notifications" && /*#__PURE__*/React.createElement("div", null, dueClients.length > 0 ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 12,
+      flexWrap: "wrap",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 700,
+      fontSize: 15,
+      margin: 0
+    }
+  }, dueClients.length, " clients need follow-up"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return handleSendWA(dueClients.filter(function (c) {
+        return c.whatsapp;
+      }));
+    },
+    disabled: sending,
+    style: {
+      fontSize: 13,
+      background: "#25D366",
+      color: "#fff",
+      border: "none",
+      borderRadius: 10,
+      padding: "9px 14px",
+      fontWeight: 700
+    }
+  }, "\uD83D\uDCF1 ", sending ? "Sending…" : "Send All (".concat(dueClients.filter(function (c) {
+    return c.whatsapp;
+  }).length, ")"))), !settings.instanceId && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fffbeb",
+      border: "1px solid #fde68a",
+      borderRadius: 10,
+      padding: "10px 14px",
+      marginBottom: 12,
+      fontSize: 12,
+      color: "#92400e"
+    }
+  }, "\u2139\uFE0F Add UltraMsg in \u2699\uFE0F Settings for auto-send."), dueClients.map(function (c) {
+    var ni = c.installments.find(function (i) {
+      return i.status !== "received";
+    });
+    var dd = ni && ni.dueDate ? daysUntil(ni.dueDate) : null;
+    var ddText = dd === null ? "" : dd < 0 ? "".concat(Math.abs(dd), "d overdue") : dd === 0 ? "Due today" : "".concat(dd, "d left");
+    var ddColor = dd !== null && dd < 0 ? "#dc2626" : "#d97706";
+    return /*#__PURE__*/React.createElement("div", {
+      key: c.id,
+      style: {
+        background: "#fff",
+        border: "1px solid #e5e7eb",
+        borderRadius: 14,
+        padding: "12px 14px",
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        marginBottom: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 8,
+        alignItems: "center"
+      }
+    }, /*#__PURE__*/React.createElement(Avatar, {
+      name: c.name,
+      size: 34
+    }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontWeight: 700,
+        fontSize: 13,
+        margin: 0
+      }
+    }, c.name), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 4,
+        marginTop: 2,
+        flexWrap: "wrap"
+      }
+    }, /*#__PURE__*/React.createElement(SchemeBadge, {
+      schemeKey: c.schemeKey
+    }), c.district && /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 10,
+        color: "#6b7280"
+      }
+    }, "\uD83D\uDCCD", c.district)))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        textAlign: "right",
+        flexShrink: 0
+      }
+    }, ni && /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        fontWeight: 700,
+        color: ddColor
+      }
+    }, "Inst.", ni.no, ": ", ddText), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 10,
+        color: "#6b7280"
+      }
+    }, ni && ni.claimRequired ? "Claim required" : "Auto release"))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return setSelectedId(c.id);
+      },
+      style: {
+        flex: 1,
+        fontSize: 12,
+        borderRadius: 8
+      }
+    }, "View"), c.whatsapp && /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return handleSendWA([c]);
+      },
+      disabled: sending,
+      style: {
+        flex: 1,
+        fontSize: 12,
+        background: "#25D366",
+        color: "#fff",
+        border: "none",
+        borderRadius: 8,
+        fontWeight: 700,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 4
+      }
+    }, "\uD83D\uDCF1 Send")));
+  })) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      padding: 40,
+      color: "#6b7280"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 48,
+      marginBottom: 8
+    }
+  }, "\u2705"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 700,
+      margin: "0 0 4px"
+    }
+  }, "All caught up!"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13
+    }
+  }, "No installments due in next ", settings.reminderDaysBefore, " days.")), log.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: "1px solid #e5e7eb",
+      paddingTop: 16,
+      marginTop: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 700,
+      fontSize: 14,
+      margin: 0
+    }
+  }, "Notification Log"), /*#__PURE__*/React.createElement("button", {
+    onClick: clearLog,
+    style: {
+      fontSize: 12
+    }
+  }, "Clear")), log.map(function (l, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        display: "flex",
+        gap: 10,
+        padding: "8px 0",
+        borderBottom: "1px solid #f3f4f6"
+      }
+    }, /*#__PURE__*/React.createElement("span", null, l.status === "sent" ? "✅" : "❌"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        fontWeight: 600
+      }
+    }, l.clientName), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11,
+        color: "#6b7280"
+      }
+    }, l.status === "sent" ? "Sent" : "Failed: " + l.error, " \xB7 ", l.time)));
+  }))), tab === "fees" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 10,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: 12,
+      padding: 14,
+      border: "1px solid #e5e7eb"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      marginBottom: 4
+    }
+  }, "Total Fees Due"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 17,
+      fontWeight: 700
+    }
+  }, fmt(totalFeesDue))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#fff",
+      borderRadius: 12,
+      padding: 14,
+      border: "1px solid #e5e7eb"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      marginBottom: 4
+    }
+  }, "Fees Received"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 17,
+      fontWeight: 700,
+      color: "#059669"
+    }
+  }, fmt(totalFeesRec))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: totalFeesDue - totalFeesRec > 0 ? "#fffbeb" : "#f0fdf4",
+      borderRadius: 12,
+      padding: 14,
+      border: "1px solid ".concat(totalFeesDue - totalFeesRec > 0 ? "#fde68a" : "#86efac"),
+      gridColumn: "1/-1"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#6b7280",
+      marginBottom: 4
+    }
+  }, "Balance Pending"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 22,
+      fontWeight: 700,
+      color: totalFeesDue - totalFeesRec > 0 ? "#dc2626" : "#059669"
+    }
+  }, fmt(totalFeesDue - totalFeesRec)))), clients.map(function (c) {
+    var due = c.installments.reduce(function (s, i) {
+      return s + Number(i.feesDue || 0);
+    }, 0);
+    var rec = c.installments.reduce(function (s, i) {
+      return s + Number(i.feesReceived || 0);
+    }, 0);
+    var bal = due - rec;
+    var pct = due > 0 ? Math.min(100, Math.round(rec / due * 100)) : 0;
+    var balColor = bal > 0 ? "#dc2626" : "#059669";
+    var balText = due === 0 ? "Not set" : bal > 0 ? "".concat(fmt(bal), " due") : "Paid ✅";
+    return /*#__PURE__*/React.createElement("div", {
+      key: c.id,
+      onClick: function onClick() {
+        return setSelectedId(c.id);
+      },
+      style: {
+        background: "#fff",
+        border: "1px solid #e5e7eb",
+        borderRadius: 12,
+        padding: "12px 14px",
+        marginBottom: 8,
+        cursor: "pointer"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 6
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 8,
+        alignItems: "center"
+      }
+    }, /*#__PURE__*/React.createElement(Avatar, {
+      name: c.name,
+      size: 30
+    }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontWeight: 700,
+        fontSize: 13
+      }
+    }, c.name), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 4,
+        marginTop: 2
+      }
+    }, /*#__PURE__*/React.createElement(SchemeBadge, {
+      schemeKey: c.schemeKey
+    }), c.district && /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 10,
+        color: "#6b7280"
+      }
+    }, "\uD83D\uDCCD", c.district)))), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700,
+        color: due === 0 ? "#9ca3af" : balColor
+      }
+    }, balText)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr",
+        gap: 6,
+        marginBottom: 6
+      }
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 9,
+        color: "#9ca3af"
+      }
+    }, "Due"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700
+      }
+    }, fmt(due))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 9,
+        color: "#9ca3af"
+      }
+    }, "Received"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700,
+        color: "#059669"
+      }
+    }, fmt(rec))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 9,
+        color: "#9ca3af"
+      }
+    }, "Balance"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700,
+        color: balColor
+      }
+    }, fmt(bal)))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: 4,
+        background: "#f3f4f6",
+        borderRadius: 4,
+        overflow: "hidden"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: "100%",
+        width: "".concat(pct, "%"),
+        background: pct === 100 ? "#22c55e" : "#f59e0b",
+        borderRadius: 4
+      }
+    })));
+  })), tab === "reports" && /*#__PURE__*/React.createElement(ReportsTab, {
+    clients: clients
+  }), tab === "settings" && /*#__PURE__*/React.createElement(SettingsPanel, {
+    settings: settings,
+    onSave: saveSettings
+  })), selectedClient && /*#__PURE__*/React.createElement(ClientDetail, {
+    client: selectedClient,
+    onClose: function onClose() {
+      return setSelectedId(null);
+    },
+    onUpdate: updateClient,
+    onDelete: deleteClient,
+    settings: settings,
+    onSendWA: handleSendWA,
+    sending: sending
+  }), adding && /*#__PURE__*/React.createElement(AddClientModal, {
+    onClose: function onClose() {
+      return setAdding(false);
+    },
+    onAdd: addClient
+  }), toast && /*#__PURE__*/React.createElement(Toast, {
+    msg: toast.msg,
+    type: toast.type,
+    onClose: function onClose() {
+      return setToast(null);
+    }
+  }));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
+
 </script>
-</body>
-</html>
+
+</body></html>
